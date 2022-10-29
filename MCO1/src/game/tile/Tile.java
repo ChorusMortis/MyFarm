@@ -2,19 +2,122 @@ package game.tile;
 
 import game.crop.*;
 
+// TODO: implement this class
 public class Tile {
     private Crop plantedCrop;
     private boolean plowed;
-    private boolean occupied;
-    // private boolean rock; // not used as of MCO1
 
-    public TileActionReport plow() {
-        
-        return new TileActionReport();
+
+    public double calculateSellPrice(int productsProduced, int bonusEarnings) {
+        double basePrice = productsProduced * (plantedCrop.getBaseSellPrice() + bonusEarnings);
+        double waterBonus = basePrice * 0.2 * (plantedCrop.getCurrentWater() - 1);
+        double fertilizerBonus = basePrice * 0.5 * plantedCrop.getCurrentFertilizer();
+        double finalPrice = (basePrice + waterBonus + fertilizerBonus) * plantedCrop.getPremiumRate();
+        return finalPrice;
     }
 
-    // not used as of MCO1
-    // public boolean generateRock() {
-    //     return false;
-    // }
+    public TileActionReport plow() {
+        TileActionReport report = new TileActionReport(false, null, 0);
+
+        if (plowed) {
+            report.setMessage(TileActionReportMessages.PLOW_IS_PLOWED.toString());
+        } else if (plantedCrop != null) {
+            report.setMessage(TileActionReportMessages.PLOW_HAS_CROP.toString());
+        } else {
+            plowed = true;
+            report.setSuccess(true);
+            report.setMessage(TileActionReportMessages.PLOW_SUCCESS.toString());
+            report.setExpGained(TileActionData.PLOW.getExpYield());
+        }
+
+        return report;
+    }
+
+    // assumes that tile is plowed
+    public TileActionReport plant(Crop crop, double playerMoney, int seedCostReduction) {
+        TileActionReport report = new TileActionReport(false, null, 0);
+
+        if (playerMoney < plantedCrop.getBaseSeedCost() - seedCostReduction) {
+            report.setMessage(TileActionReportMessages.PLANT_NO_MONEY.toString());
+        } else if (plantedCrop != null) {
+            report.setMessage(TileActionReportMessages.PLANT_HAS_CROP.toString());
+        } else {
+            // TODO: deduct money from player externally if action was successful
+            plantedCrop = crop;
+            report.setSuccess(true);
+            report.setMessage(TileActionReportMessages.PLANT_SUCCESS.toString());
+            report.setExpGained(TileActionData.PLANT.getExpYield());
+        }
+
+        return report;
+    }
+
+    // assumes that plantedCrop != null and isHarvestable()
+    public HarvestCropReport harvest(int bonusEarnings) {
+        HarvestCropReport report = plantedCrop.harvest();
+        plantedCrop = null;
+        plowed = false;
+        double sellPrice = calculateSellPrice(report.getProductsProduced(), bonusEarnings);
+        report.setProfit(sellPrice);
+        
+        return report;
+    }
+
+    // assumes that plantedCrop != null and is !withered
+    public TileActionReport water() {
+        plantedCrop.water();
+        TileActionReport report = new TileActionReport(true, null, 0);
+        report.setMessage(TileActionReportMessages.WATER_SUCCESS.toString());
+        report.setExpGained(TileActionData.WATER.getExpYield());
+
+        return report;
+    }
+
+    // assumes that plantedCrop != null and is !withered
+    public TileActionReport fertilize(double playerMoney) {
+        TileActionReport report = new TileActionReport(false, null, 0);
+
+        if (playerMoney < TileActionData.FERTILIZE.getMoneyCost()) {
+            report.setMessage(TileActionReportMessages.FERTILIZE_NO_MONEY.toString());
+        } else {
+            // TODO: deduct money from player externally
+            plantedCrop.fertilize();
+            report.setSuccess(true);
+            report.setMessage(TileActionReportMessages.FERTILIZE_SUCCESS.toString());
+            report.setExpGained(TileActionData.FERTILIZE.getExpYield());
+        }
+
+        return report;
+    }
+
+    // assumes that tile has a rock; unused so don't call for now
+    public TileActionReport mine() {
+        TileActionReport report = new TileActionReport(false, null, 0);
+        return report;
+    }
+
+    public TileActionReport dig(double playerMoney) {
+        TileActionReport report = new TileActionReport(false, null, 0);
+
+        if (playerMoney < TileActionData.DIG.getMoneyCost()) {
+            report.setMessage(TileActionReportMessages.DIG_NO_MONEY.toString());
+        } else if (!plowed) {
+            // TODO: deduct money from player externally
+            report.setMessage(TileActionReportMessages.DIG_TILE_NOTHING.toString());
+            report.setExpGained(TileActionData.DIG.getExpYield());
+        } else if (plantedCrop != null) {
+            // TODO: deduct money from player externally
+            plantedCrop = null;
+            report.setMessage(TileActionReportMessages.DIG_CROP_REMOVED.toString());
+            report.setExpGained(TileActionData.DIG.getExpYield());
+        } else {
+            // TODO: deduct money from player externally
+            plowed = false;
+            report.setSuccess(true);
+            report.setMessage(TileActionReportMessages.DIG_TILE_UNPLOWED.toString());
+            report.setExpGained(TileActionData.DIG.getExpYield());
+        } 
+
+        return report;
+    }
 }
