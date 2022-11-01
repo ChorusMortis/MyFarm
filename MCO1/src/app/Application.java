@@ -10,13 +10,15 @@ import game.tile.*;
 import app.MenuOption.*;
 
 /**
- * TODO List:
- * 1. Display game status (info about tile, player stats, etc.) to player.
- * 2. Implement the rank registration feature.
- * 3. Improve prompts on menus and spacing in design.
- * 4. Fix broken logic and bugs, especially in calculations and where null return values are possible.
- * 5. Fix getter and setter logic. Remove any unnecessary methods.
- * 6. Optimize and clean up code.
+ * TODO List: (Listed in descending order by priority)
+ * 1. Implement the rank registration feature.
+ * 2. TODO: Display game status (info about tile, player stats, etc.) to player.
+ * 3. TODO: Fix broken logic and bugs, especially in calculations and where null return values are possible.
+ * 4. TODO: Apply stat changes after registration to calculations and newly created Crops.
+ * 4. TODO: Improve prompts on menus and spacing in design.
+ * 5. TODO: Fix getter and setter logic. Remove any unnecessary methods.
+ * 6. TODO: Optimize and clean up code.
+ * 7. TODO: Document code.
  */
 public final class Application {
     private static Player player;
@@ -46,7 +48,7 @@ public final class Application {
             } else if (action.compareToIgnoreCase(MainMenuOption.NEXT_DAY.getSelector()) == 0) {
                 nextDay();
             } else if (action.compareToIgnoreCase(MainMenuOption.REGISTER.getSelector()) == 0) {
-                registerForRank();
+                openRegisterMenu();
             } else if (action.compareToIgnoreCase(MainMenuOption.EXIT.getSelector()) == 0) {
                 restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
                 stayOnMenu = false;
@@ -207,6 +209,34 @@ public final class Application {
         }
     }
 
+    public static void openRegisterMenu() {
+        boolean stayOnMenu = true;
+        while (stayOnMenu) {
+            printRegistrationMenu();
+            System.out.println("Enter the name of the rank you would like to register for.");
+            String input = getStringInput("Alternatively, enter \"Exit\" to go back to the previous menu: ");
+            if (input.compareToIgnoreCase("Exit") == 0) {
+                stayOnMenu = false;
+            } else {
+                FarmerType rank = FarmerType.getFromStringName(input);
+                if (rank != null) {
+                    RankRegistrationReport r = player.registerRank(rank);
+                    if (r.isSuccess()) {
+                        player.deductMoney(r.getCost());
+                        player.setFarmer(new Farmer(r.getNewRank()));
+                        int waterLimitIncrease = r.getNewWaterLimitIncrease();
+                        int fertilizerLimitIncrease = r.getNewFertilizerLimitIncrease();
+                        // TODO: for MCO2, call this for every tile in the farm lot
+                        getTile().updateCropStats(waterLimitIncrease, fertilizerLimitIncrease);
+                    }
+                    System.out.println(r);
+                } else {
+                    System.out.println("Rank not found!");
+                }
+            }
+        }
+    }
+
     public static void printRegistrationMenu() {
         // TODO: improve formatting of this
         System.out.println("Register\n");
@@ -223,16 +253,6 @@ public final class Application {
     public static void nextDay() {
         // TODO: in MCO2, replace with for each loop, calling each tile in farm lot's nextDay() method
         getTile().nextDay();
-    }
-
-    public static void registerForRank() {
-        /**
-         * TODO: implement this
-         * 1. Display ranks and let player choose rank
-         * 2. Change player rank and stats
-         * 3? Print report?
-         * 3. Loop until player exits menu
-         */
     }
 
     public static String getStringInput(String prompt) {

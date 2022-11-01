@@ -89,8 +89,7 @@ public class Crop {
             }
         }
     }
-
-    // TODO: implement harvest()
+    
     public HarvestCropReport harvest() {
         int productsProduced = getRandomYield();
         return new HarvestCropReport(productsProduced, 0, expYield);

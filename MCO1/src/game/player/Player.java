@@ -1,10 +1,7 @@
 package game.player;
 
-import game.farm.FarmLot;
-import game.farm.Farmer;
-import game.farm.FarmerType;
+import game.farm.*;
 
-// TODO: implement this class
 public class Player {
     private Farmer farmer;
     private FarmLot farmLot;
@@ -13,7 +10,38 @@ public class Player {
     private Stats stats;
     private int level;
     private double experience;
+    
+    public RankRegistrationReport registerRank(FarmerType farmerType) {
+        RankRegistrationReport report = new RankRegistrationReport();
 
+        double rankRegFee = farmerType.getRegFee();
+        int curLevelReq = this.farmer.getFarmerType().getLevelReq();
+        int rankLevelReq = farmerType.getLevelReq();
+
+        if (objectCoins < rankRegFee) {
+            report.setMessage(RankRegistrationReport.REGISTER_NO_MONEY);
+        } else if (level < rankLevelReq) {
+            report.setMessage(RankRegistrationReport.REGISTER_LOW_LEVEL);
+        } else if (rankLevelReq < curLevelReq) {
+            report.setMessage(RankRegistrationReport.REGISTER_IS_LOWER_RANK);
+        } else if (rankLevelReq > curLevelReq) {
+            report.setMessage(RankRegistrationReport.REGISTER_IS_HIGHER_RANK);
+        } else if (rankLevelReq == curLevelReq) {
+            report.setMessage(RankRegistrationReport.REGISTER_IS_CURRENT_RANK);
+        } else {
+            // TODO: apply stat changes
+            report.setSuccess(true);
+            report.setMessage(RankRegistrationReport.REGISTER_SUCCESS);
+            report.setNewRank(farmerType);
+            report.setNewBonusEarnings(farmerType.getBonusEarnings());
+            report.setNewSeedCostReduction(farmerType.getSeedCostReduction());
+            report.setNewWaterLimitIncrease(farmerType.getWaterLimitIncrease());
+            report.setNewFertilizerLimitIncrease(farmerType.getFertilizerLimitIncrease());
+            report.setCost(rankRegFee);
+        }
+
+        return report;
+    }
 
     public double addMoney(double amount) {
         return objectCoins += amount;
@@ -23,12 +51,14 @@ public class Player {
         return objectCoins -= amount;
     }
 
-    public double addXP(double amount) {
-        return experience += amount;
-    }
-
     public int updateLevel() {
         return level = (int)experience % 100;
+    }
+    
+    public double addXP(double amount) {
+        experience += amount;
+        updateLevel();
+        return experience;
     }
 
     public Player(FarmerType farmer) {
@@ -49,7 +79,7 @@ public class Player {
         this.experience = experience;
     }
 
-    // TODO: insert setters and getters
+
     public Farmer getFarmer() {
         return farmer;
     }

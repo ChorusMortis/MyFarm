@@ -130,6 +130,13 @@ public class Tile {
         System.out.print(s);
     }
 
+    public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {
+        if (hasCrop()) {
+            plantedCrop.setWaterLimit(plantedCrop.getWaterLimit() + waterLimitIncrease);
+            plantedCrop.setFertilizerLimit(plantedCrop.getFertilizerLimit() + fertilizerLimitIncrease);
+        }
+    }
+
     public Crop getPlantedCrop() {
         return plantedCrop;
     }

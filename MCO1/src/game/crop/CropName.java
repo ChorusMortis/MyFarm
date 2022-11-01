@@ -16,7 +16,7 @@ public enum CropName {
 
     private String stringName;
 
-    private final static Map<String, CropName> ENUM_MAP;
+    private final static Map<String, CropName> stringNameToEnum;
 
     private CropName(String stringName) {
         this.stringName = stringName;
@@ -27,11 +27,11 @@ public enum CropName {
         for (CropName c : CropName.values()) {
             map.put(c.getStringName().toLowerCase(), c);
         }
-        ENUM_MAP = Collections.unmodifiableMap(map);
+        stringNameToEnum = Collections.unmodifiableMap(map);
     }
 
     public static CropName getFromString(String name) {
-        return ENUM_MAP.get(name);
+        return stringNameToEnum.get(name.toLowerCase());
     }
 
     public String getStringName() {

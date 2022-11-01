@@ -15,8 +15,7 @@ public class Farmer {
         this.waterLimitIncrease = farmerType.getWaterLimitIncrease();
         this.fertilizerLimitIncrease = farmerType.getFertilizerLimitIncrease();
     }
-
-
+    
     public FarmerType getFarmerType() {
         return farmerType;
     }

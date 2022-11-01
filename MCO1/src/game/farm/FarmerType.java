@@ -1,5 +1,9 @@
 package game.farm;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
+
 public enum FarmerType {
     DEFAULT("Default Farmer", 0.0, 0, 0.0, 0.0, 0, 0),
     REGISTERED("Registered Farmer", 200.0, 5, 1.0, 1.0, 0, 0),
@@ -15,6 +19,7 @@ public enum FarmerType {
     private int waterLimitIncrease;
     private int fertilizerLimitIncrease;
 
+    private final static Map<String, FarmerType> stringNameToEnum;
 
     private FarmerType(String stringName, double regFee, int levelReq, double bonusEarnings, double seedCostReduction,
             int waterLimitIncrease, int fertilizerLimitIncrease) {
@@ -27,6 +32,17 @@ public enum FarmerType {
         this.fertilizerLimitIncrease = fertilizerLimitIncrease;
     }
 
+    static {
+        Map<String, FarmerType> map = new HashMap<String, FarmerType>();
+        for (FarmerType f : FarmerType.values()) {
+            map.put(f.getStringName().toLowerCase(), f);
+        }
+        stringNameToEnum = Collections.unmodifiableMap(map);
+    }
+
+    public static FarmerType getFromStringName(String name) {
+        return stringNameToEnum.get(name.toLowerCase());
+    }
 
     public String getStringName() {
         return stringName;
