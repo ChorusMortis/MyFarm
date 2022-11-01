@@ -5,7 +5,7 @@ public enum CropType {
     FLOWER("Flower"),
     FRUIT_TREE("Fruit Tree");
 
-    String stringName;
+    private String stringName;
 
     private CropType(String stringName) {
         this.stringName = stringName;

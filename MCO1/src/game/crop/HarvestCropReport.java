@@ -10,17 +10,18 @@ public class HarvestCropReport {
 
     public HarvestCropReport() {
     }
-    
+
     public HarvestCropReport(int productsProduced, double expGained) {
         this.productsProduced = productsProduced;
         this.expGained = expGained;
     }
 
-    public HarvestCropReport(int productsProduced, int profit, double expGained) {
+    public HarvestCropReport(int productsProduced, double profit, double expGained) {
         this.productsProduced = productsProduced;
         this.profit = profit;
         this.expGained = expGained;
     }
+    
 
     public boolean isSuccess() {
         return success;
@@ -60,5 +61,17 @@ public class HarvestCropReport {
 
     public void setExpGained(double expGained) {
         this.expGained = expGained;
+    }
+
+    @Override
+    public String toString() {
+        var s = "Harvest Report:\n"
+              + "Success: " + success + "\n"
+              + "Message: " + message + "\n"
+              + "Products Produced: " + productsProduced + "\n"
+              + "Profit: " + profit + "\n"
+              + "Experience Gained: " + expGained + "\n";
+
+        return s;
     }
 }

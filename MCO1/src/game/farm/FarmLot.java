@@ -7,6 +7,7 @@ public class FarmLot {
 
     
     public FarmLot() {
+        this.tiles = new Tile();
     }
     
     public FarmLot(Tile tiles) {

@@ -28,7 +28,7 @@ public enum TileActionReportMessages {
     DIG_CROP_REMOVED("The crop was removed!"),
     DIG_HAS_ROCK("The tile is occupied by a rock!");
 
-    String message;
+    private String message;
 
     private TileActionReportMessages(String message) {
         this.message = message;

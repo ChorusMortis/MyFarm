@@ -37,6 +37,10 @@ public class TileActionReport {
 
     @Override
 	public String toString() {
-		return "Report [Success: " + success + ", Reason: " + message + "]";
+        var s = "Report:\n"
+              + "Success: " + success + "\n"
+              + "Message: " + message + "\n";
+        
+        return s;
 	}
 }

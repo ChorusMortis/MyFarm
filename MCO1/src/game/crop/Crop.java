@@ -4,8 +4,8 @@ public class Crop {
     // Crop description
     private CropName name;
     private CropType type;
-    private int baseSeedCost;
-    private int baseSellPrice;
+    private double baseSeedCost;
+    private double baseSellPrice;
     private double expYield;
 
     // Harvesting
@@ -96,12 +96,25 @@ public class Crop {
         return new HarvestCropReport(productsProduced, 0, expYield);
     }
 
-    public Crop() {
+    public void printState() {
+        var s = "Crop Name: " + name.getStringName() + "\n"
+              + "Crop Type: " + type.getStringName() + "\n"
+              + "Age: " + age + " / " + harvestAge + "\n"
+              + "Water: " + currentWater + " / " + waterNeeded + "(" + waterLimit + ")" + "\n"
+              + "Fertilizer: " + currentFertilizer + " / " + fertilizerNeeded + "(" + fertilizerLimit + ")" + "\n"
+              + "Is harvestable: " + harvestable + "\n"
+              + "Is withered: " + withered + "\n"
+              + "Is overripe: " + overripe + "\n"
+              + "Lacks water: " + lacksWater + "\n"
+              + "Lacks fertilizer: " + lacksFertilizer + "\n";
+
+        System.out.print(s);
     }
 
-    public Crop(CropName name, CropType type, int baseSeedCost, int baseSellPrice, double expYield, int harvestAge,
-            int minYield, int maxYield, int waterNeeded, int waterLimit, int fertilizerNeeded, int fertilizerLimit,
-            double premiumRate) {
+
+    public Crop(CropName name, CropType type, double baseSeedCost, double baseSellPrice, double expYield,
+            int harvestAge, int minYield, int maxYield, int waterNeeded, int waterLimit, int fertilizerNeeded,
+            int fertilizerLimit, double premiumRate) {
         this.name = name;
         this.type = type;
         this.baseSeedCost = baseSeedCost;
@@ -115,6 +128,22 @@ public class Crop {
         this.fertilizerNeeded = fertilizerNeeded;
         this.fertilizerLimit = fertilizerLimit;
         this.premiumRate = premiumRate;
+    }
+    
+    public Crop(CropData cropData) {
+        this.name = cropData.getName();
+        this.type = cropData.getType();
+        this.baseSeedCost = cropData.getBaseSeedCost();
+        this.baseSellPrice = cropData.getBaseSellPrice();
+        this.expYield = cropData.getExpYield();
+        this.harvestAge = cropData.getHarvestAge();
+        this.minYield = cropData.getMinYield();
+        this.maxYield = cropData.getMaxYield();
+        this.waterNeeded = cropData.getNeededWater();
+        this.waterLimit = cropData.getWaterLimit();
+        this.fertilizerNeeded = cropData.getNeededFertilizer();
+        this.fertilizerLimit = cropData.getFertilizerLimit();
+        this.premiumRate = cropData.getPremiumRate();
     }
 
     public CropName getName() {
@@ -133,19 +162,19 @@ public class Crop {
         this.type = type;
     }
 
-    public int getBaseSeedCost() {
+    public double getBaseSeedCost() {
         return baseSeedCost;
     }
 
-    public void setBaseSeedCost(int baseSeedCost) {
+    public void setBaseSeedCost(double baseSeedCost) {
         this.baseSeedCost = baseSeedCost;
     }
 
-    public int getBaseSellPrice() {
+    public double getBaseSellPrice() {
         return baseSellPrice;
     }
 
-    public void setBaseSellPrice(int baseSellPrice) {
+    public void setBaseSellPrice(double baseSellPrice) {
         this.baseSellPrice = baseSellPrice;
     }
 

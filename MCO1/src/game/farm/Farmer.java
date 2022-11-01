@@ -2,15 +2,12 @@ package game.farm;
 
 public class Farmer {
     private FarmerType farmerType;
-    private int bonusEarnings;
-    private int seedCostReduction;
+    private double bonusEarnings;
+    private double seedCostReduction;
     private int waterLimitIncrease;
     private int fertilizerLimitIncrease;
 
-
-    public Farmer() {
-    }
-
+    
     public Farmer(FarmerType farmerType) {
         this.farmerType = farmerType;
         this.bonusEarnings = farmerType.getBonusEarnings();
@@ -28,19 +25,19 @@ public class Farmer {
         this.farmerType = farmerType;
     }
 
-    public int getBonusEarnings() {
+    public double getBonusEarnings() {
         return bonusEarnings;
     }
 
-    public void setBonusEarnings(int bonusEarnings) {
+    public void setBonusEarnings(double bonusEarnings) {
         this.bonusEarnings = bonusEarnings;
     }
 
-    public int getSeedCostReduction() {
+    public double getSeedCostReduction() {
         return seedCostReduction;
     }
 
-    public void setSeedCostReduction(int seedCostReduction) {
+    public void setSeedCostReduction(double seedCostReduction) {
         this.seedCostReduction = seedCostReduction;
     }
 

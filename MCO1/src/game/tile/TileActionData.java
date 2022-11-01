@@ -9,8 +9,8 @@ public enum TileActionData {
     MINE(50, 15),
     DIG(7, 2);
 
-    double moneyCost;
-    double expYield;
+    private double moneyCost;
+    private double expYield;
 
     private TileActionData(double moneyCost, double expYield) {
         this.moneyCost = moneyCost;

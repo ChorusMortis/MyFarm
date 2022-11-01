@@ -2,13 +2,12 @@ package game.tile;
 
 import game.crop.*;
 
-// TODO: implement this class
 public class Tile {
     private Crop plantedCrop;
     private boolean plowed;
 
 
-    public double calculateSellPrice(int productsProduced, int bonusEarnings) {
+    public double calculateSellPrice(int productsProduced, double bonusEarnings) {
         double basePrice = productsProduced * (plantedCrop.getBaseSellPrice() + bonusEarnings);
         double waterBonus = basePrice * 0.2 * (plantedCrop.getCurrentWater() - 1);
         double fertilizerBonus = basePrice * 0.5 * plantedCrop.getCurrentFertilizer();
@@ -34,15 +33,14 @@ public class Tile {
     }
 
     // assumes that tile is plowed
-    public TileActionReport plant(Crop crop, double playerMoney, int seedCostReduction) {
+    public TileActionReport plant(Crop crop, double playerMoney, double seedCostReduction) {
         TileActionReport report = new TileActionReport(false, null, 0);
 
-        if (playerMoney < plantedCrop.getBaseSeedCost() - seedCostReduction) {
+        if (playerMoney < crop.getBaseSeedCost() - seedCostReduction) {
             report.setMessage(TileActionReportMessages.PLANT_NO_MONEY.toString());
         } else if (plantedCrop != null) {
             report.setMessage(TileActionReportMessages.PLANT_HAS_CROP.toString());
         } else {
-            // TODO: deduct money from player externally if action was successful
             plantedCrop = crop;
             report.setSuccess(true);
             report.setMessage(TileActionReportMessages.PLANT_SUCCESS.toString());
@@ -53,10 +51,12 @@ public class Tile {
     }
 
     // assumes that plantedCrop != null and isHarvestable()
-    public HarvestCropReport harvest(int bonusEarnings) {
+    public HarvestCropReport harvest(double bonusEarnings) {
         HarvestCropReport report = plantedCrop.harvest();
         plantedCrop = null;
         plowed = false;
+
+        // products produced and exp yield are calculated in plantedCrop's harvest() method
         double sellPrice = calculateSellPrice(report.getProductsProduced(), bonusEarnings);
         report.setProfit(sellPrice);
         
@@ -80,7 +80,6 @@ public class Tile {
         if (playerMoney < TileActionData.FERTILIZE.getMoneyCost()) {
             report.setMessage(TileActionReportMessages.FERTILIZE_NO_MONEY.toString());
         } else {
-            // TODO: deduct money from player externally
             plantedCrop.fertilize();
             report.setSuccess(true);
             report.setMessage(TileActionReportMessages.FERTILIZE_SUCCESS.toString());
@@ -102,16 +101,13 @@ public class Tile {
         if (playerMoney < TileActionData.DIG.getMoneyCost()) {
             report.setMessage(TileActionReportMessages.DIG_NO_MONEY.toString());
         } else if (!plowed) {
-            // TODO: deduct money from player externally
             report.setMessage(TileActionReportMessages.DIG_TILE_NOTHING.toString());
             report.setExpGained(TileActionData.DIG.getExpYield());
         } else if (plantedCrop != null) {
-            // TODO: deduct money from player externally
             plantedCrop = null;
             report.setMessage(TileActionReportMessages.DIG_CROP_REMOVED.toString());
             report.setExpGained(TileActionData.DIG.getExpYield());
         } else {
-            // TODO: deduct money from player externally
             plowed = false;
             report.setSuccess(true);
             report.setMessage(TileActionReportMessages.DIG_TILE_UNPLOWED.toString());
@@ -119,5 +115,30 @@ public class Tile {
         } 
 
         return report;
+    }
+
+    public void nextDay() {
+        if (hasCrop()) {
+            plantedCrop.nextDay();
+        }
+    }
+    
+    public void printState() {
+        var s = "Has crop: " + hasCrop() + "\n"
+              + "Is plowed: " + isPlowed() + "\n";
+        
+        System.out.print(s);
+    }
+
+    public Crop getPlantedCrop() {
+        return plantedCrop;
+    }
+
+    public boolean hasCrop() {
+        return plantedCrop != null;
+    }
+
+    public boolean isPlowed() {
+        return plowed;
     }
 }

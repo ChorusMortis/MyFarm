@@ -6,6 +6,7 @@ public class Stats {
     private int timesWatered;
     private int timesFertilized;
     private int timesHarvested;
+    private int timesDug;
 
 
     public int addTimesPlanted() {
@@ -28,10 +29,14 @@ public class Stats {
         return ++timesHarvested;
     }
 
+    public int addTimesDug() {
+        return ++timesDug;
+    }
+    
+
     public int getTimesPlanted() {
         return timesPlanted;
     }
-
 
     public void setTimesPlanted(int timesPlanted) {
         this.timesPlanted = timesPlanted;
@@ -67,5 +72,13 @@ public class Stats {
 
     public void setTimesHarvested(int timesHarvested) {
         this.timesHarvested = timesHarvested;
+    }
+
+    public int getTimesDug() {
+        return timesDug;
+    }
+
+    public void setTimesDug(int timesDug) {
+        this.timesDug = timesDug;
     }
 }
