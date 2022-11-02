@@ -104,12 +104,13 @@ public class Tile {
             report.setMessage(TileActionReportMessages.DIG_TILE_NOTHING.toString());
             report.setExpGained(TileActionData.DIG.getExpYield());
         } else if (plantedCrop != null) {
+            plowed = false;
             plantedCrop = null;
+            report.setSuccess(true);
             report.setMessage(TileActionReportMessages.DIG_CROP_REMOVED.toString());
             report.setExpGained(TileActionData.DIG.getExpYield());
         } else {
             plowed = false;
-            report.setSuccess(true);
             report.setMessage(TileActionReportMessages.DIG_TILE_UNPLOWED.toString());
             report.setExpGained(TileActionData.DIG.getExpYield());
         } 
@@ -135,6 +136,7 @@ public class Tile {
         }
     }
 
+    // call on all tiles when player registers rank
     public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {
         if (hasCrop()) {
             plantedCrop.setWaterLimit(plantedCrop.getWaterLimit() + waterLimitIncrease);

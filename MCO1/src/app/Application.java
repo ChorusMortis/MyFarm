@@ -13,8 +13,8 @@ import app.MenuOption.*;
  * TODO List: (Listed in descending order by priority)
  * 1. Implement the rank registration feature.
  * 2. Display game status (info about tile, player stats, etc.) to player.
- * 3. TODO: Apply stat changes after registration to calculations and newly created Crops.
- * 4. TODO: Fix broken logic and bugs, especially in calculations and where null return values are possible.
+ * 3. Apply stat changes after registration to calculations and newly created Crops.
+ * 4. TODO: Implement game-ending conditions.
  * 5. TODO: Improve prompts on menus and spacing in design.
  * 6. TODO: Fix getter and setter logic. Remove any unnecessary methods.
  * 7. TODO: Optimize and clean up code.
@@ -66,9 +66,9 @@ public final class Application {
     }
 
     public static void initializeGame() {
-        double defaultObjectCoins = 100.0;
-        int defaultLevel = 0;
-        double defaultExperience = 0.0;
+        double defaultObjectCoins = 1000.0;
+        int defaultLevel = 15;
+        double defaultExperience = 150000.0;
         player = new Player(FarmerType.DEFAULT, defaultObjectCoins, defaultLevel, defaultExperience);
     }
 
@@ -191,6 +191,8 @@ public final class Application {
                 CropData result = CropData.getFromCropName(CropName.getFromString(input));
                 if (result != null) {
                     crop = new Crop(result);
+                    crop.setWaterLimit(crop.getWaterLimit() + getFarmer().getWaterLimitIncrease());
+                    crop.setFertilizerLimit(crop.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease());
                     stayOnMenu = false;
                 } else {
                     System.out.println("Crop not found!");
@@ -211,9 +213,11 @@ public final class Application {
         for (CropData c : CropData.values()) {
             System.out.format("%s | %s | %d | %d(%d) | %d(%d) | %d-%d | %.2f | %.2f | %.2f\n",
                               c.getName().getStringName(), c.getType().getStringName(), c.getHarvestAge(),
-                              c.getNeededWater(), c.getWaterLimit(), c.getNeededFertilizer(), c.getFertilizerLimit(),
-                              c.getMinYield(), c.getMaxYield(), c.getBaseSeedCost(), c.getBaseSellPrice(),
-                              c.getExpYield());
+                              c.getNeededWater(), c.getWaterLimit() + getFarmer().getWaterLimitIncrease(),
+                              c.getNeededFertilizer(),
+                              c.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease(), c.getMinYield(),
+                              c.getMaxYield(), c.getBaseSeedCost() - getFarmer().getSeedCostReduction(),
+                              c.getBaseSellPrice() + getFarmer().getBonusEarnings(), c.getExpYield());
         }
     }
 
@@ -232,8 +236,9 @@ public final class Application {
                     if (r.isSuccess()) {
                         player.deductMoney(r.getCost());
                         player.setFarmer(new Farmer(r.getNewRank()));
-                        int waterLimitIncrease = r.getNewWaterLimitIncrease();
-                        int fertilizerLimitIncrease = r.getNewFertilizerLimitIncrease();
+                        int waterLimitIncrease = r.getNewWaterLimitIncrease() - getFarmer().getWaterLimitIncrease();
+                        int fertilizerLimitIncrease = r.getNewFertilizerLimitIncrease()
+                                                      - getFarmer().getFertilizerLimitIncrease();
                         // TODO: for MCO2, call this for every tile in the farm lot
                         getTile().updateCropStats(waterLimitIncrease, fertilizerLimitIncrease);
                     }

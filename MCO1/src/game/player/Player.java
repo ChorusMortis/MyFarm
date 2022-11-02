@@ -18,18 +18,16 @@ public class Player {
         int curLevelReq = this.farmer.getFarmerType().getLevelReq();
         int rankLevelReq = farmerType.getLevelReq();
 
-        if (objectCoins < rankRegFee) {
-            report.setMessage(RankRegistrationReport.REGISTER_NO_MONEY);
-        } else if (level < rankLevelReq) {
-            report.setMessage(RankRegistrationReport.REGISTER_LOW_LEVEL);
-        } else if (rankLevelReq < curLevelReq) {
+        if (rankLevelReq < curLevelReq) {
             report.setMessage(RankRegistrationReport.REGISTER_IS_LOWER_RANK);
-        } else if (rankLevelReq > curLevelReq) {
-            report.setMessage(RankRegistrationReport.REGISTER_IS_HIGHER_RANK);
         } else if (rankLevelReq == curLevelReq) {
             report.setMessage(RankRegistrationReport.REGISTER_IS_CURRENT_RANK);
+        } else if (level < rankLevelReq) {
+            report.setMessage(RankRegistrationReport.REGISTER_LOW_LEVEL);
+        } else if (objectCoins < rankRegFee) {
+            report.setMessage(RankRegistrationReport.REGISTER_NO_MONEY);
         } else {
-            // TODO: apply stat changes
+            // the stats of the crops in the field are updated externally (see Application.java)
             report.setSuccess(true);
             report.setMessage(RankRegistrationReport.REGISTER_SUCCESS);
             report.setNewRank(farmerType);
