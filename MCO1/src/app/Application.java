@@ -241,20 +241,23 @@ public final class Application {
     }
 
     public static void printBuyCropMenu() {
-        // TODO: improve formatting of this
         System.out.println("Buy Crop\n");
-        System.out.format("%s | %s | %s | %s | %s | %s | %s | %s | %s\n",
-                          "Name", "Type", "Harvest Time (in days)", "Needed Water (Bonus Limit)",
-                          "Needed Fertilizer (Bonus Limit)", "Products Produced", "Seed Cost",
-                          "Base Sell Price Per Piece", "XP Yield");
         for (CropData c : CropData.values()) {
-            System.out.format("%s | %s | %d | %d(%d) | %d(%d) | %d-%d | %.2f | %.2f | %.2f\n",
-                              c.getName().getStringName(), c.getType().getStringName(), c.getHarvestAge(),
-                              c.getNeededWater(), c.getWaterLimit() + getFarmer().getWaterLimitIncrease(),
-                              c.getNeededFertilizer(),
-                              c.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease(), c.getMinYield(),
-                              c.getMaxYield(), c.getBaseSeedCost() - getFarmer().getSeedCostReduction(),
-                              c.getBaseSellPrice() + getFarmer().getBonusEarnings(), c.getExpYield());
+            var s = "Name: " + c.getName().getStringName() + "\n"
+                  + "Type: " + c.getType().getStringName() + "\n"
+                  + "Harvest Time (in days): " + c.getHarvestAge() + "\n"
+                  + "Needed Water (Bonus Limit): " + c.getNeededWater() + "(" +
+                    (c.getWaterLimit() + getFarmer().getWaterLimitIncrease()) + ")\n"
+                  + "Needed Fertilizer (Bonus Limit): " + c.getNeededFertilizer() + "(" +
+                    (c.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease()) + ")\n"
+                  + "Yield: " + (c.getMinYield() == c.getMaxYield()
+                                ? c.getMinYield()
+                                : c.getMinYield() + "-" + c.getMaxYield()) + "\n"
+                  + "Seed Cost: " + (c.getBaseSeedCost() - getFarmer().getSeedCostReduction()) + "\n"
+                  + "Sell Price (per piece): " + (c.getBaseSellPrice() + getFarmer().getBonusEarnings()) + "\n"
+                  + "XP Yield: " + c.getExpYield() + "\n";
+
+            System.out.println(s);
         }
     }
 
@@ -288,15 +291,17 @@ public final class Application {
     }
 
     public static void printRegistrationMenu() {
-        // TODO: improve formatting of this
         System.out.println("Register\n");
-        System.out.format("%s | %s | %s | %s | %s | %s | %s\n",
-                          "Name", "Fee", "Level Requirement", "Bonus Earnings", "Seed Cost Reduction",
-                          "Water Limit Increase", "Fertilizer Limit Increase");
         for (FarmerType f : FarmerType.values()) {
-            System.out.format("%s | %.2f | %d | %.2f | %.2f | %d | %d\n",
-                              f.getStringName(), f.getRegFee(), f.getLevelReq(), f.getBonusEarnings(),
-                              f.getSeedCostReduction(), f.getWaterLimitIncrease(), f.getFertilizerLimitIncrease());
+            var s = "Name: " + f.getStringName() + "\n"
+                  + "Fee: " + f.getRegFee() + "\n"
+                  + "Level Requirement: " + f.getLevelReq() + "\n"
+                  + "Bonus Earnings: " + f.getBonusEarnings() + "\n"
+                  + "Seed Cost Reduction: " + f.getSeedCostReduction() + "\n"
+                  + "Water Limit Increase: " + f.getWaterLimitIncrease() + "\n"
+                  + "Fertilizer Limit Increase: " + f.getFertilizerLimitIncrease() + "\n";
+            
+            System.out.println(s);
         }
     }
 
