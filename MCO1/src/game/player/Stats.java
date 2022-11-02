@@ -7,6 +7,7 @@ public class Stats {
     private int timesFertilized;
     private int timesHarvested;
     private int timesDug;
+    // private int timesMined;
 
 
     public int addTimesPlanted() {
@@ -81,4 +82,18 @@ public class Stats {
     public void setTimesDug(int timesDug) {
         this.timesDug = timesDug;
     }
+
+    @Override
+    public String toString() {
+        var s = "Times Planted: " + timesPlanted + "\n"
+              + "Times Plowed: " + timesPlowed + "\n"
+              + "Times Watered: " + timesWatered + "\n"
+              + "Times Fertilized: " + timesFertilized + "\n"
+              + "Times Harvested: " + timesHarvested + "\n"
+              + "Times Dug: " + timesDug + "\n";
+        
+        return s;
+    }
+
+    
 }

@@ -52,13 +52,13 @@ public class Tile {
 
     // assumes that plantedCrop != null and isHarvestable()
     public HarvestCropReport harvest(double bonusEarnings) {
-        HarvestCropReport report = plantedCrop.harvest();
-        plantedCrop = null;
-        plowed = false;
-
         // products produced and exp yield are calculated in plantedCrop's harvest() method
+        HarvestCropReport report = plantedCrop.harvest();
         double sellPrice = calculateSellPrice(report.getProductsProduced(), bonusEarnings);
         report.setProfit(sellPrice);
+
+        plantedCrop = null;
+        plowed = false;
         
         return report;
     }
@@ -128,6 +128,11 @@ public class Tile {
               + "Is plowed: " + isPlowed() + "\n";
         
         System.out.print(s);
+
+        if (hasCrop()) {
+            System.out.println();
+            plantedCrop.printState();
+        }
     }
 
     public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {

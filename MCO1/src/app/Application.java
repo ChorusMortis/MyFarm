@@ -12,13 +12,13 @@ import app.MenuOption.*;
 /**
  * TODO List: (Listed in descending order by priority)
  * 1. Implement the rank registration feature.
- * 2. TODO: Display game status (info about tile, player stats, etc.) to player.
- * 3. TODO: Fix broken logic and bugs, especially in calculations and where null return values are possible.
- * 4. TODO: Apply stat changes after registration to calculations and newly created Crops.
- * 4. TODO: Improve prompts on menus and spacing in design.
- * 5. TODO: Fix getter and setter logic. Remove any unnecessary methods.
- * 6. TODO: Optimize and clean up code.
- * 7. TODO: Document code.
+ * 2. Display game status (info about tile, player stats, etc.) to player.
+ * 3. TODO: Apply stat changes after registration to calculations and newly created Crops.
+ * 4. TODO: Fix broken logic and bugs, especially in calculations and where null return values are possible.
+ * 5. TODO: Improve prompts on menus and spacing in design.
+ * 6. TODO: Fix getter and setter logic. Remove any unnecessary methods.
+ * 7. TODO: Optimize and clean up code.
+ * 8. TODO: Document code.
  */
 public final class Application {
     private static Player player;
@@ -40,6 +40,11 @@ public final class Application {
 
         boolean stayOnMenu = true;
         while (stayOnMenu) {
+            player.printState();
+            System.out.println("Tile Info");
+            getTile().printState();
+            System.out.println();
+
             printMainMenu();
             String action = getStringInput("Enter input: ");
 
@@ -61,7 +66,10 @@ public final class Application {
     }
 
     public static void initializeGame() {
-        player = new Player(FarmerType.DEFAULT);
+        double defaultObjectCoins = 100.0;
+        int defaultLevel = 0;
+        double defaultExperience = 0.0;
+        player = new Player(FarmerType.DEFAULT, defaultObjectCoins, defaultLevel, defaultExperience);
     }
 
     public static void printMainMenu() {

@@ -90,6 +90,4 @@ public class RankRegistrationReport {
 
         return s;
     }
-
-    
 }

@@ -52,7 +52,7 @@ public class Player {
     }
 
     public int updateLevel() {
-        return level = (int)experience % 100;
+        return level = (int)(experience / 100);
     }
     
     public double addXP(double amount) {
@@ -60,14 +60,23 @@ public class Player {
         updateLevel();
         return experience;
     }
+    
+    public void printState() {
+        var s = "Objectcoins: " + objectCoins + "\n"
+              + "Level: " + level + "\n"
+              + "Experience: " + experience + "\n"
+              + stats + "\n";
+        
+        System.out.print(s);
+    }
 
-    public Player(FarmerType farmer) {
+    public Player(FarmerType farmer, double objectCoins, int level, double experience) {
         this.farmer = new Farmer(farmer);
         this.farmLot = new FarmLot();
-        this.objectCoins = 0.0;
+        this.objectCoins = objectCoins;
         this.stats = new Stats();
-        this.level = 0;
-        this.experience = 0.0;
+        this.level = level;
+        this.experience = experience;
     }
 
     public Player(Farmer farmer, FarmLot farmLot, double objectCoins, Stats stats, int level, double experience) {
@@ -126,5 +135,5 @@ public class Player {
 
     public void setExperience(double experience) {
         this.experience = experience;
-    }    
+    }
 }
