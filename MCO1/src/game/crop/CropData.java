@@ -27,8 +27,6 @@ public enum CropData {
     private double baseSellprice;
     private double expYield;
 
-    private static final Map<CropName, CropData> CropNameToEnum;
-
     private CropData(CropName name, CropType type, int harvestAge, int neededWater, int waterLimit,
             int neededFertilizer, int fertilizerLimit, int minYield, int maxYield, double baseSeedCost,
             double baseSellprice, double expYield) {
@@ -46,6 +44,7 @@ public enum CropData {
         this.expYield = expYield;
     }
 
+    private static final Map<CropName, CropData> CropNameToEnum;
     static {
         Map<CropName, CropData> map = new HashMap<CropName, CropData>();
         for (CropData c : CropData.values()) {
@@ -54,8 +53,24 @@ public enum CropData {
         CropNameToEnum = Collections.unmodifiableMap(map);
     }
 
+    private static final double lowestBaseSeedCost;
+    static {
+        double tempLowestCost = CropData.values()[0].getBaseSeedCost();
+        for (CropData c : CropData.values()) {
+            double cost = c.getBaseSeedCost();
+            if (cost < tempLowestCost) {
+                tempLowestCost = cost;
+            }
+        }
+        lowestBaseSeedCost = tempLowestCost;
+    }
+
     public static CropData getFromCropName(CropName name) {
         return CropNameToEnum.get(name);
+    }
+    
+    public static double getLowestBaseSeedCost() {
+        return lowestBaseSeedCost;
     }
 
     public CropName getName() {

@@ -14,7 +14,7 @@ import app.MenuOption.*;
  * 1. Implement the rank registration feature.
  * 2. Display game status (info about tile, player stats, etc.) to player.
  * 3. Apply stat changes after registration to calculations and newly created Crops.
- * 4. TODO: Implement game-ending conditions.
+ * 4. Implement game-ending conditions.
  * 5. TODO: Improve prompts on menus and spacing in design.
  * 6. TODO: Fix getter and setter logic. Remove any unnecessary methods.
  * 7. TODO: Optimize and clean up code.
@@ -38,13 +38,9 @@ public final class Application {
         initializeGame();
         boolean restartGame = false;
 
-        boolean stayOnMenu = true;
-        while (stayOnMenu) {
-            player.printState();
-            System.out.println("Tile Info");
-            getTile().printState();
-            System.out.println();
-
+        boolean keepPlaying = true;
+        printGameState();
+        while (keepPlaying) {
             printMainMenu();
             String action = getStringInput("Enter input: ");
 
@@ -56,9 +52,17 @@ public final class Application {
                 openRegisterMenu();
             } else if (action.compareToIgnoreCase(MainMenuOption.EXIT.getSelector()) == 0) {
                 restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
-                stayOnMenu = false;
+                keepPlaying = false;
             } else {
                 System.out.println("Invalid input!");
+            }
+
+            if (keepPlaying) {
+                printGameState();
+                keepPlaying = checkGameEndConditions();
+                if (!keepPlaying) {
+                    restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
+                }
             }
         }
 
@@ -66,10 +70,41 @@ public final class Application {
     }
 
     public static void initializeGame() {
-        double defaultObjectCoins = 1000.0;
-        int defaultLevel = 15;
-        double defaultExperience = 150000.0;
+        double defaultObjectCoins = 100.0;
+        int defaultLevel = 0;
+        double defaultExperience = 0.0;
         player = new Player(FarmerType.DEFAULT, defaultObjectCoins, defaultLevel, defaultExperience);
+    }
+
+    public static void printGameState() {
+        player.printState();
+        System.out.println("Tile Info");
+        getTile().printState();
+        System.out.println();
+    }
+
+    public static boolean checkGameEndConditions() {
+        boolean keepPlaying = true;
+        String message = null;
+
+        // TODO: remove/modify this in MCO2
+        if (getCrop() != null && getCrop().isWithered() &&
+            player.getObjectCoins() < TileActionData.DIG.getMoneyCost()) {
+                keepPlaying = false;
+                message = "Uh-oh! You have a withered crop and can't afford to dig it up!";
+        }
+
+        // TODO: in MCO2, check every tile if it's empty AND check if each tile has a withered crop
+        if (getCrop() == null && player.getObjectCoins() < CropData.getLowestBaseSeedCost()) {
+            keepPlaying = false;
+            message = "Uh-oh! You have no growing crops and you can't buy anything to plant!";
+        }
+
+        if (message != null) {
+            System.out.println(message);
+        }
+
+        return keepPlaying;
     }
 
     public static void printMainMenu() {
@@ -108,6 +143,8 @@ public final class Application {
 
                         System.out.println(r);
                     }
+                } else {
+                    System.out.println("The tile is not plowed yet!");
                 }
             } else if (action.compareToIgnoreCase(TileActionOption.HARVEST.getSelector()) == 0) {
                 if (getCrop() != null && getCrop().isHarvestable()) {
