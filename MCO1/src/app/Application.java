@@ -103,9 +103,9 @@ public final class Application {
         // TODO: in MCO2, check every tile if it's empty AND check if each tile has a withered crop
         if (getCrop() == null &&
             player.getObjectCoins() < CropData.getLowestBaseSeedCost() - getFarmer().getSeedCostReduction()) {
-            keepPlaying = false;
-            message = "Uh-oh! You have no growing crops and you can't buy anything to plant!";
-        }
+                keepPlaying = false;
+                message = "Uh-oh! You have no growing crops and you can't buy anything to plant!";   
+            }
 
         if (message != null) {
             System.out.println(message);
