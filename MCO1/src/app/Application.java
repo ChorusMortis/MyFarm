@@ -17,7 +17,7 @@ import app.MenuOption.*;
  * 4. Implement game-ending conditions.
  * 5. Improve prompts on menus and spacing in design.
  * 6. Fix getter and setter logic. Remove any unnecessary methods.
- * 7. TODO: Optimize and clean up code.
+ * 7. Optimize and clean up code.
  * 8. TODO: Document code.
  */
 public final class Application {
@@ -31,6 +31,7 @@ public final class Application {
     public static void main(String[] args) {
         while (running) {
             running = playGame();
+            System.out.println();
         }
     }
 
@@ -46,26 +47,21 @@ public final class Application {
             String action = getStringInput("Select action: ");
             System.out.println();
 
-            if (action.compareToIgnoreCase(MainMenuOption.TILE_ACTIONS.getSelector()) == 0)  {
-                openTileActionsMenu();
-            } else if (action.compareToIgnoreCase(MainMenuOption.NEXT_DAY.getSelector()) == 0) {
-                nextDay();
-            } else if (action.compareToIgnoreCase(MainMenuOption.REGISTER.getSelector()) == 0) {
-                openRegisterMenu();
-            } else if (action.compareToIgnoreCase(MainMenuOption.EXIT.getSelector()) == 0) {
-                restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
-                keepPlaying = false;
-            } else {
+            MainMenuOption option = MainMenuOption.getFromSelector(action);
+            if (option == null) {
                 System.out.println("ERROR: Invalid input!");
+            } else {
+                keepPlaying = doMainMenuOption(option);
             }
             System.out.println();
 
             if (keepPlaying) {
                 printGameState();
                 keepPlaying = checkGameEndConditions();
-                if (!keepPlaying) {
-                    restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
-                }
+            }
+
+            if (!keepPlaying) {
+                restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
             }
         }
 
@@ -118,6 +114,19 @@ public final class Application {
         }
     }
 
+    public static boolean doMainMenuOption(MainMenuOption option) {
+        boolean keepPlaying = true;
+
+        switch (option) {
+            case TILE_ACTIONS: openTileActionsMenu(); break;
+            case NEXT_DAY: nextDay(); break;
+            case REGISTER: openRegisterMenu(); break;
+            case EXIT: keepPlaying = false; break;
+        }
+
+        return keepPlaying;
+    }
+
     public static void printTileActionsMenu() {
         System.out.println("Tile Actions\n");
         for (TileActionOption o : TileActionOption.values()) {
@@ -133,7 +142,23 @@ public final class Application {
             String action = getStringInput("Select action: ");
             System.out.println();
 
-            if (action.compareToIgnoreCase(TileActionOption.PLOW.getSelector()) == 0) {
+            TileActionOption option = TileActionOption.getFromSelector(action);
+            if (option == null) {
+                System.out.println("ERROR: Invalid input!");
+            } else {
+                stayOnMenu = doTileActionOption(option);
+            }
+            System.out.println();
+        }
+
+        System.out.println("Exiting the Tile Actions menu.");
+    }
+
+    public static boolean doTileActionOption(TileActionOption option) {
+        boolean stayOnMenu = true;
+
+        switch (option) {
+            case PLOW: {
                 // no preconditions
                 TileActionReport r = getTile().plow();
                 if (r.isSuccess()) {
@@ -141,87 +166,93 @@ public final class Application {
                     player.getStats().addTimesPlowed();
                 }
                 System.out.println(r);
-            } else if (action.compareToIgnoreCase(TileActionOption.PLANT.getSelector()) == 0) {
+                break;
+            }
+
+            case PLANT: {
                 if (getTile().isPlowed()) {
                     Crop crop = openBuyCropMenu();
                     if (crop != null) {
                         System.out.println();
                         double seedCostReduction = player.getFarmer().getSeedCostReduction();
                         TileActionReport r = getTile().plant(crop, player.getObjectCoins(), seedCostReduction);
-
                         if (r.isSuccess()) {
                             player.deductMoney(crop.getBaseSeedCost() - seedCostReduction);
                             player.addXP(r.getExpGained());
                             player.getStats().addTimesPlanted();
                         }
-
                         System.out.println(r);
                     }
                 } else {
                     System.out.println("ERROR: The tile is not plowed yet!");
                 }
-            } else if (action.compareToIgnoreCase(TileActionOption.HARVEST.getSelector()) == 0) {
+                break;
+            }
+            
+            case HARVEST: {
                 if (getCrop() != null && getCrop().isHarvestable()) {
                     double bonusEarnings = getFarmer().getBonusEarnings();
                     HarvestCropReport r = getTile().harvest(bonusEarnings);
-
                     // harvests are always successful so no need for conditions
                     player.addMoney(r.getProfit());
                     player.addXP(r.getExpGained());
                     player.getStats().addTimesHarvested();
-
                     System.out.println(r);
                 } else {
                     System.out.println("ERROR: There is either no planted crop or the crop is not harvestable!");
                 }
-            } else if (action.compareToIgnoreCase(TileActionOption.WATER.getSelector()) == 0) {
+                break;
+            }
+
+            case WATER: {
                 if (getCrop() != null && !getCrop().isWithered()) {
                     TileActionReport r = getTile().water();
-
                     // watering a crop is always successful (though it has no effect if crop's water is at its limit)
                     player.addXP(r.getExpGained());
                     player.getStats().addTimesWatered();
-
                     System.out.println(r);   
                 } else {
                     System.out.println("ERROR: There is either no planted crop or the crop is withered!");
                 }
-            } else if (action.compareToIgnoreCase(TileActionOption.FERTILIZE.getSelector()) == 0) {
+                break;
+            }
+
+            case FERTILIZE: {
                 if (getCrop() != null && !getCrop().isWithered()) {
                     TileActionReport r = getTile().fertilize(player.getObjectCoins());
-
                     if (r.isSuccess()) {
                         // money is not deducted in fertilize() method so it must be deducted here
                         player.deductMoney(TileActionData.FERTILIZE.getMoneyCost());
                         player.addXP(r.getExpGained());
                         player.getStats().addTimesFertilized();
                     }
-
                     System.out.println(r);
                 } else {
                     System.out.println("ERROR: There is either no crop or the crop is withered!");
                 }
-            } else if (action.compareToIgnoreCase(TileActionOption.DIG.getSelector()) == 0) {
+                break;
+            }
+
+            case DIG: {
                 // no preconditions
                 TileActionReport r = getTile().dig(player.getObjectCoins());
-
                 // money may sometimes need to be deducted from player even though the action "failed"
                 if (r.getExpGained() != 0) {
                     player.deductMoney(TileActionData.DIG.getMoneyCost());
                     player.addXP(r.getExpGained());
                     player.getStats().addTimesDug();
                 }
-
                 System.out.println(r);
-            } else if (action.compareToIgnoreCase(TileActionOption.EXIT.getSelector()) == 0) {
-                stayOnMenu = false;
-            } else {
-                System.out.println("ERROR: Invalid input!");
+                break;
             }
-            System.out.println();
+
+            case EXIT: {
+                stayOnMenu = false;
+                break;
+            }
         }
 
-        System.out.println("Exiting the Tile Actions menu.");
+        return stayOnMenu;
     }
 
     public static void printBuyCropMenu() {
