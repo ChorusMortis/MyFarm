@@ -10,15 +10,8 @@ import game.tile.*;
 import app.MenuOption.*;
 
 /**
- * TODO List: (Listed in descending order by priority)
- * 1. Implement the rank registration feature.
- * 2. Display game status (info about tile, player stats, etc.) to player.
- * 3. Apply stat changes after registration to calculations and newly created Crops.
- * 4. Implement game-ending conditions.
- * 5. Improve prompts on menus and spacing in design.
- * 6. Fix getter and setter logic. Remove any unnecessary methods.
- * 7. Optimize and clean up code.
- * 8. TODO: Document code.
+ * Executes and runs the main game.
+ * @version   1.0
  */
 public final class Application {
     private final static Scanner sc = new Scanner(System.in);
@@ -28,6 +21,10 @@ public final class Application {
     private Application() {
     }
 
+    /**
+     * Executes the game as long as the player wishes to continue.
+     * @param args   No arguments are parsed or used.
+     */
     public static void main(String[] args) {
         while (running) {
             running = playGame();
@@ -35,6 +32,13 @@ public final class Application {
         }
     }
 
+    /**
+     * The subroutine that actually runs the game and does all the work.
+     * @return
+     *    true    if the player wishes to restart the game and continue
+     *            playing.
+     *    false   otherwise.
+     */
     public static boolean playGame() {
         initializeGame();
         boolean restartGame = false;
@@ -68,6 +72,9 @@ public final class Application {
         return restartGame;
     }
 
+    /**
+     * Initializes the game's (specifically the player's) initial data.
+     */
     public static void initializeGame() {
         double defaultObjectCoins = 100.0;
         int defaultLevel = 0;
@@ -75,6 +82,13 @@ public final class Application {
         player = new Player(FarmerType.DEFAULT, defaultObjectCoins, defaultLevel, defaultExperience);
     }
 
+    /**
+     * Checks the game's ending conditions and returns a Boolean depending on
+     * whether the game should end or not.
+     * @return
+     *    true    if at least one game ending condition is met.
+     *    false   otherwise.
+     */
     public static boolean checkGameEndConditions() {
         boolean keepPlaying = true;
         String message = null;
@@ -99,6 +113,10 @@ public final class Application {
         return keepPlaying;
     }
 
+    /**
+     * Prints the game's state. This includes the player's stats and the state
+     * of the tile(s), as well as the planted crop(s), if any.
+     */
     public static void printGameState() {
         System.out.println("Player Stats");
         player.printState();
@@ -107,6 +125,10 @@ public final class Application {
         System.out.println();
     }
 
+    /**
+     * Prints the main menu, specifically the options' selectors, names, and
+     * description.
+     */
     public static void printMainMenu() {
         System.out.println("Main Menu\n");
         for (MainMenuOption o : MainMenuOption.values()) {
@@ -114,6 +136,13 @@ public final class Application {
         }
     }
 
+    /**
+     * Executes the given main menu option.
+     * @param option   The main menu option to be executed.
+     * @return
+     *    true    if the player stays on the menu (does not exit).
+     *    false   otherwise.
+     */
     public static boolean doMainMenuOption(MainMenuOption option) {
         boolean keepPlaying = true;
 
@@ -127,6 +156,10 @@ public final class Application {
         return keepPlaying;
     }
 
+    /**
+     * Prints the tile actions menu, specifically the options' selectors,
+     * names, and description.
+     */
     public static void printTileActionsMenu() {
         System.out.println("Tile Actions\n");
         for (TileActionOption o : TileActionOption.values()) {
@@ -134,6 +167,10 @@ public final class Application {
         }
     }
 
+    /**
+     * Opens the tile actions (sub)menu and executes what the player wants to
+     * do to the tile(s).
+     */
     public static void openTileActionsMenu() {
         boolean stayOnMenu = true;
         while (stayOnMenu) {
@@ -154,6 +191,13 @@ public final class Application {
         System.out.println("Exiting the Tile Actions menu.");
     }
 
+    /**
+     * Executes the tile action that the player wants to do on the tile(s).
+     * @param option   The action to be executed.
+     * @return
+     *    true    if the player does not exit the menu.
+     *    false   otherwise.
+     */
     public static boolean doTileActionOption(TileActionOption option) {
         boolean stayOnMenu = true;
 
@@ -255,6 +299,9 @@ public final class Application {
         return stayOnMenu;
     }
 
+    /**
+     * Prints the buy crop menu, specifically each buyable crop's stats.
+     */
     public static void printBuyCropMenu() {
         System.out.println("Buy Crop\n");
         for (CropData c : CropData.values()) {
@@ -276,6 +323,12 @@ public final class Application {
         }
     }
 
+    /**
+     * Opens the buy crop menu, where the player can buy or not buy a crop.
+     * @return
+     *    A Crop   if the player buys a crop.
+     *    null     otherwise.
+     */
     public static Crop openBuyCropMenu() {
         Crop crop = null;
 
@@ -305,12 +358,20 @@ public final class Application {
         return crop;
     }
 
+    /**
+     * Calls each tile's nextDay() method.
+     * @see   Tile#nextDay()
+     */
     public static void nextDay() {
         // TODO: in MCO2, replace with for each loop, calling each tile in farm lot's nextDay() method
         System.out.println("Moving on to the next day!\n");
         getTile().nextDay();
     }
 
+    /**
+     * Prints the registration menu, specifically each farmer rank/type's
+     * stats.
+     */
     public static void printRegistrationMenu() {
         System.out.println("Register\n");
         for (FarmerType f : FarmerType.values()) {
@@ -326,6 +387,10 @@ public final class Application {
         }
     }
 
+    /**
+     * Opens the registration menu, where the player can register for a new
+     * farmer type/rank.
+     */
     public static void openRegisterMenu() {
         boolean stayOnMenu = true;
         while (stayOnMenu) {
@@ -356,11 +421,26 @@ public final class Application {
         }
     }
 
+    /**
+     * Displays a prompt and asks the player to enter a string.
+     * @param prompt   Text to display before asking the player to enter a
+     *                 string.
+     * @return   The string entered by the user.
+     */
     public static String getStringInput(String prompt) {
         System.out.print(prompt);
         return sc.nextLine();
     }
 
+    /**
+     * Displays a prompt and asks the player to enter "yes" or "no". Returns
+     * the appropriate Boolean value.
+     * @param prompt   Text to display before asking the player to enter "yes"
+     *                 or "no".
+     * @return
+     *    true    if the player enters "yes".
+     *    false   otherwise.
+     */
     public static boolean askYesOrNo(String prompt) {
         boolean retval = false;
 
@@ -382,13 +462,27 @@ public final class Application {
 
         return retval;
     }
-    
+
+    /**
+     * Convenience method for getting the farm lot's tiles.
+     * @return   The farm lot's tiles.
+     */
     public static Tile getTile() {
         return player.getFarmLot().getTiles();
     }
+
+    /**
+     * Convenience method for getting the tile's planted crop.
+     * @return   The tile's planted crop.
+     */
     public static Crop getCrop() {
         return player.getFarmLot().getTiles().getPlantedCrop();
     }
+
+    /**
+     * Convenience method for getting the player's farmer instance.
+     * @return   The player's farmer instance.
+     */
     public static Farmer getFarmer() {
         return player.getFarmer();
     }
