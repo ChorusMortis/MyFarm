@@ -15,7 +15,7 @@ import app.MenuOption.*;
  * 2. Display game status (info about tile, player stats, etc.) to player.
  * 3. Apply stat changes after registration to calculations and newly created Crops.
  * 4. Implement game-ending conditions.
- * 5. TODO: Improve prompts on menus and spacing in design.
+ * 5. Improve prompts on menus and spacing in design.
  * 6. TODO: Fix getter and setter logic. Remove any unnecessary methods.
  * 7. TODO: Optimize and clean up code.
  * 8. TODO: Document code.
@@ -42,7 +42,9 @@ public final class Application {
         printGameState();
         while (keepPlaying) {
             printMainMenu();
-            String action = getStringInput("Enter input: ");
+            System.out.println();
+            String action = getStringInput("Select action: ");
+            System.out.println();
 
             if (action.compareToIgnoreCase(MainMenuOption.TILE_ACTIONS.getSelector()) == 0)  {
                 openTileActionsMenu();
@@ -54,8 +56,9 @@ public final class Application {
                 restartGame = askYesOrNo("Do you want to restart the game instead of exiting?");
                 keepPlaying = false;
             } else {
-                System.out.println("Invalid input!");
+                System.out.println("ERROR: Invalid input!");
             }
+            System.out.println();
 
             if (keepPlaying) {
                 printGameState();
@@ -77,6 +80,7 @@ public final class Application {
     }
 
     public static void printGameState() {
+        System.out.println("Player Stats");
         player.printState();
         System.out.println("Tile Info");
         getTile().printState();
@@ -110,7 +114,7 @@ public final class Application {
     public static void printMainMenu() {
         System.out.println("Main Menu\n");
         for (MainMenuOption o : MainMenuOption.values()) {
-            System.out.format("[%s] %s :: %s\n".indent(3), o.getSelector(), o.getName(), o.getDescription());
+            System.out.format("[%s] %s :: %s\n", o.getSelector(), o.getName(), o.getDescription());
         }
     }
 
@@ -118,7 +122,9 @@ public final class Application {
         boolean stayOnMenu = true;
         while (stayOnMenu) {
             printTileActionsMenu();
-            String action = getStringInput("Enter input: ");
+            System.out.println();
+            String action = getStringInput("Select action: ");
+            System.out.println();
 
             if (action.compareToIgnoreCase(TileActionOption.PLOW.getSelector()) == 0) {
                 // no preconditions
@@ -132,6 +138,7 @@ public final class Application {
                 if (getTile().isPlowed()) {
                     Crop crop = openBuyCropMenu();
                     if (crop != null) {
+                        System.out.println();
                         double seedCostReduction = player.getFarmer().getSeedCostReduction();
                         TileActionReport r = getTile().plant(crop, player.getObjectCoins(), seedCostReduction);
 
@@ -144,7 +151,7 @@ public final class Application {
                         System.out.println(r);
                     }
                 } else {
-                    System.out.println("The tile is not plowed yet!");
+                    System.out.println("ERROR: The tile is not plowed yet!");
                 }
             } else if (action.compareToIgnoreCase(TileActionOption.HARVEST.getSelector()) == 0) {
                 if (getCrop() != null && getCrop().isHarvestable()) {
@@ -158,7 +165,7 @@ public final class Application {
 
                     System.out.println(r);
                 } else {
-                    System.out.println("There is either no planted crop or the crop is not harvestable!");
+                    System.out.println("ERROR: There is either no planted crop or the crop is not harvestable!");
                 }
             } else if (action.compareToIgnoreCase(TileActionOption.WATER.getSelector()) == 0) {
                 if (getCrop() != null && !getCrop().isWithered()) {
@@ -170,7 +177,7 @@ public final class Application {
 
                     System.out.println(r);   
                 } else {
-                    System.out.println("There is either no planted crop or the crop is withered!");
+                    System.out.println("ERROR: There is either no planted crop or the crop is withered!");
                 }
             } else if (action.compareToIgnoreCase(TileActionOption.FERTILIZE.getSelector()) == 0) {
                 if (getCrop() != null && !getCrop().isWithered()) {
@@ -185,7 +192,7 @@ public final class Application {
 
                     System.out.println(r);
                 } else {
-                    System.out.println("There is either no crop or the crop is withered!");
+                    System.out.println("ERROR: There is either no crop or the crop is withered!");
                 }
             } else if (action.compareToIgnoreCase(TileActionOption.DIG.getSelector()) == 0) {
                 // no preconditions
@@ -202,15 +209,18 @@ public final class Application {
             } else if (action.compareToIgnoreCase(TileActionOption.EXIT.getSelector()) == 0) {
                 stayOnMenu = false;
             } else {
-                System.out.println("Invalid input!");
+                System.out.println("ERROR: Invalid input!");
             }
+            System.out.println();
         }
+
+        System.out.println("Exiting the Tile Actions menu.");
     }
 
     public static void printTileActionsMenu() {
         System.out.println("Tile Actions\n");
         for (TileActionOption o : TileActionOption.values()) {
-            System.out.format("[%s] %s :: %s\n".indent(3), o.getSelector(), o.getName(), o.getDescription());
+            System.out.format("[%s] %s :: %s\n", o.getSelector(), o.getName(), o.getDescription());
         }
     }
 
@@ -222,6 +232,7 @@ public final class Application {
             printBuyCropMenu();
             System.out.println("Enter the name of the crop you want to buy and plant.");
             String input = getStringInput("Alternatively, enter \"Exit\" to exit the menu: ");
+            System.out.println();
             if (input.compareToIgnoreCase("Exit") == 0) {
                 stayOnMenu = false;
             } else {
@@ -232,10 +243,12 @@ public final class Application {
                     crop.setFertilizerLimit(crop.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease());
                     stayOnMenu = false;
                 } else {
-                    System.out.println("Crop not found!");
+                    System.out.println("ERROR: Crop not found!\n");
                 }
             }
         }
+
+        System.out.println("Exiting the Buy Crop menu.");
 
         return crop;
     }
@@ -267,6 +280,7 @@ public final class Application {
             printRegistrationMenu();
             System.out.println("Enter the name of the rank you would like to register for.");
             String input = getStringInput("Alternatively, enter \"Exit\" to go back to the previous menu: ");
+            System.out.println();
             if (input.compareToIgnoreCase("Exit") == 0) {
                 stayOnMenu = false;
             } else {
@@ -284,7 +298,7 @@ public final class Application {
                     }
                     System.out.println(r);
                 } else {
-                    System.out.println("Rank not found!");
+                    System.out.println("Rank not found!\n");
                 }
             }
         }
@@ -307,6 +321,7 @@ public final class Application {
 
     public static void nextDay() {
         // TODO: in MCO2, replace with for each loop, calling each tile in farm lot's nextDay() method
+        System.out.println("Moving on to the next day!\n");
         getTile().nextDay();
     }
 

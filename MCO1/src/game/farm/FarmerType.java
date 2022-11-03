@@ -19,8 +19,6 @@ public enum FarmerType {
     private int waterLimitIncrease;
     private int fertilizerLimitIncrease;
 
-    private final static Map<String, FarmerType> stringNameToEnum;
-
     private FarmerType(String stringName, double regFee, int levelReq, double bonusEarnings, double seedCostReduction,
             int waterLimitIncrease, int fertilizerLimitIncrease) {
         this.stringName = stringName;
@@ -32,6 +30,7 @@ public enum FarmerType {
         this.fertilizerLimitIncrease = fertilizerLimitIncrease;
     }
 
+    private final static Map<String, FarmerType> stringNameToEnum;
     static {
         Map<String, FarmerType> map = new HashMap<String, FarmerType>();
         for (FarmerType f : FarmerType.values()) {
