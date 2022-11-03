@@ -11,12 +11,12 @@ public enum CropType {
         this.stringName = stringName;
     }
 
-    public String getStringName() {
-        return stringName;
-    }
-
     @Override
     public String toString() {
         return this.stringName;
+    }
+    
+    public String getStringName() {
+        return stringName;
     }
 }

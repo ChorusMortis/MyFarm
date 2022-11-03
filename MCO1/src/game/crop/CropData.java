@@ -14,6 +14,9 @@ public enum CropData {
     MANGO(CropName.MANGO, CropType.FRUIT_TREE, 10, 7, 7, 4, 4, 5, 15, 100, 8, 25),
     APPLE(CropName.APPLE, CropType.FRUIT_TREE, 10, 7, 7, 5, 5, 10, 15, 200, 5, 25);
 
+    private static final Map<CropName, CropData> CropNameToEnum;
+    private static final double lowestBaseSeedCost;
+    
     private CropName name;
     private CropType type;
     private int harvestAge;
@@ -26,6 +29,25 @@ public enum CropData {
     private double baseSeedCost;
     private double baseSellprice;
     private double expYield;
+
+    static {
+        Map<CropName, CropData> map = new HashMap<CropName, CropData>();
+        for (CropData c : CropData.values()) {
+            map.put(c.getName(), c);
+        }
+        CropNameToEnum = Collections.unmodifiableMap(map);
+    }
+
+    static {
+        double tempLowestCost = CropData.values()[0].getBaseSeedCost();
+        for (CropData c : CropData.values()) {
+            double cost = c.getBaseSeedCost();
+            if (cost < tempLowestCost) {
+                tempLowestCost = cost;
+            }
+        }
+        lowestBaseSeedCost = tempLowestCost;
+    }
 
     private CropData(CropName name, CropType type, int harvestAge, int neededWater, int waterLimit,
             int neededFertilizer, int fertilizerLimit, int minYield, int maxYield, double baseSeedCost,
@@ -42,27 +64,6 @@ public enum CropData {
         this.baseSeedCost = baseSeedCost;
         this.baseSellprice = baseSellprice;
         this.expYield = expYield;
-    }
-
-    private static final Map<CropName, CropData> CropNameToEnum;
-    static {
-        Map<CropName, CropData> map = new HashMap<CropName, CropData>();
-        for (CropData c : CropData.values()) {
-            map.put(c.getName(), c);
-        }
-        CropNameToEnum = Collections.unmodifiableMap(map);
-    }
-
-    private static final double lowestBaseSeedCost;
-    static {
-        double tempLowestCost = CropData.values()[0].getBaseSeedCost();
-        for (CropData c : CropData.values()) {
-            double cost = c.getBaseSeedCost();
-            if (cost < tempLowestCost) {
-                tempLowestCost = cost;
-            }
-        }
-        lowestBaseSeedCost = tempLowestCost;
     }
 
     public static CropData getFromCropName(CropName name) {
@@ -111,6 +112,7 @@ public enum CropData {
     }
     public double getPremiumRate() {
         double rate = 1.0;
+        // flowers generate 10% more money because "they are pretty"
         if (type == CropType.FLOWER) {
             rate = 1.1;
         }

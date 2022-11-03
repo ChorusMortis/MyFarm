@@ -7,8 +7,7 @@ public class Stats {
     private int timesFertilized;
     private int timesHarvested;
     private int timesDug;
-    // private int timesMined;
-
+    // TODO: private int timesMined;
 
     public int addTimesPlanted() {
         return ++timesPlanted;
@@ -33,55 +32,6 @@ public class Stats {
     public int addTimesDug() {
         return ++timesDug;
     }
-    
-
-    public int getTimesPlanted() {
-        return timesPlanted;
-    }
-
-    public void setTimesPlanted(int timesPlanted) {
-        this.timesPlanted = timesPlanted;
-    }
-
-    public int getTimesPlowed() {
-        return timesPlowed;
-    }
-
-    public void setTimesPlowed(int timesPlowed) {
-        this.timesPlowed = timesPlowed;
-    }
-
-    public int getTimesWatered() {
-        return timesWatered;
-    }
-
-    public void setTimesWatered(int timesWatered) {
-        this.timesWatered = timesWatered;
-    }
-
-    public int getTimesFertilized() {
-        return timesFertilized;
-    }
-
-    public void setTimesFertilized(int timesFertilized) {
-        this.timesFertilized = timesFertilized;
-    }
-
-    public int getTimesHarvested() {
-        return timesHarvested;
-    }
-
-    public void setTimesHarvested(int timesHarvested) {
-        this.timesHarvested = timesHarvested;
-    }
-
-    public int getTimesDug() {
-        return timesDug;
-    }
-
-    public void setTimesDug(int timesDug) {
-        this.timesDug = timesDug;
-    }
 
     @Override
     public String toString() {
@@ -94,6 +44,41 @@ public class Stats {
         
         return s;
     }
-
     
+    public int getTimesPlanted() {
+        return timesPlanted;
+    }
+    public void setTimesPlanted(int timesPlanted) {
+        this.timesPlanted = timesPlanted;
+    }
+    public int getTimesPlowed() {
+        return timesPlowed;
+    }
+    public void setTimesPlowed(int timesPlowed) {
+        this.timesPlowed = timesPlowed;
+    }
+    public int getTimesWatered() {
+        return timesWatered;
+    }
+    public void setTimesWatered(int timesWatered) {
+        this.timesWatered = timesWatered;
+    }
+    public int getTimesFertilized() {
+        return timesFertilized;
+    }
+    public void setTimesFertilized(int timesFertilized) {
+        this.timesFertilized = timesFertilized;
+    }
+    public int getTimesHarvested() {
+        return timesHarvested;
+    }
+    public void setTimesHarvested(int timesHarvested) {
+        this.timesHarvested = timesHarvested;
+    }
+    public int getTimesDug() {
+        return timesDug;
+    }
+    public void setTimesDug(int timesDug) {
+        this.timesDug = timesDug;
+    }    
 }

@@ -5,7 +5,6 @@ public class TileActionReport {
     private String message;
     private double expGained;
 
-
     public TileActionReport() {
     }
 
@@ -15,6 +14,14 @@ public class TileActionReport {
         this.expGained = expGained;
     }
 
+    @Override
+	public String toString() {
+        var s = "Report:\n"
+              + "Success: " + success + "\n"
+              + "Message: " + message + "\n";
+        
+        return s;
+	}
 
     public boolean isSuccess() {
         return success;
@@ -34,13 +41,4 @@ public class TileActionReport {
     public void setExpGained(double expGained) {
         this.expGained = expGained;
     }
-
-    @Override
-	public String toString() {
-        var s = "Report:\n"
-              + "Success: " + success + "\n"
-              + "Message: " + message + "\n";
-        
-        return s;
-	}
 }

@@ -5,12 +5,29 @@ import game.farm.*;
 public class Player {
     private Farmer farmer;
     private FarmLot farmLot;
-
     private double objectCoins;
     private Stats stats;
     private int level;
     private double experience;
-    
+
+    public Player(FarmerType farmer, double objectCoins, int level, double experience) {
+        this.farmer = new Farmer(farmer);
+        this.farmLot = new FarmLot();
+        this.objectCoins = objectCoins;
+        this.stats = new Stats();
+        this.level = level;
+        this.experience = experience;
+    }
+
+    public Player(Farmer farmer, FarmLot farmLot, double objectCoins, Stats stats, int level, double experience) {
+        this.farmer = farmer;
+        this.farmLot = farmLot;
+        this.objectCoins = objectCoins;
+        this.stats = stats;
+        this.level = level;
+        this.experience = experience;
+    }
+
     public RankRegistrationReport registerRank(FarmerType farmerType) {
         RankRegistrationReport report = new RankRegistrationReport();
 
@@ -27,7 +44,7 @@ public class Player {
         } else if (objectCoins < rankRegFee) {
             report.setMessage(RankRegistrationReport.REGISTER_NO_MONEY);
         } else {
-            // the stats of the crops in the field are updated externally (see Application.java)
+            // the stats of the crops in the field are updated externally (see Application class)
             report.setSuccess(true);
             report.setMessage(RankRegistrationReport.REGISTER_SUCCESS);
             report.setNewRank(farmerType);
@@ -68,69 +85,39 @@ public class Player {
         System.out.print(s);
     }
 
-    public Player(FarmerType farmer, double objectCoins, int level, double experience) {
-        this.farmer = new Farmer(farmer);
-        this.farmLot = new FarmLot();
-        this.objectCoins = objectCoins;
-        this.stats = new Stats();
-        this.level = level;
-        this.experience = experience;
-    }
-
-    public Player(Farmer farmer, FarmLot farmLot, double objectCoins, Stats stats, int level, double experience) {
-        this.farmer = farmer;
-        this.farmLot = farmLot;
-        this.objectCoins = objectCoins;
-        this.stats = stats;
-        this.level = level;
-        this.experience = experience;
-    }
-
-
     public Farmer getFarmer() {
         return farmer;
     }
-
     public void setFarmer(Farmer farmer) {
         this.farmer = farmer;
     }
-
     public FarmLot getFarmLot() {
         return farmLot;
     }
-
     public void setFarmLot(FarmLot farmLot) {
         this.farmLot = farmLot;
     }
-
     public double getObjectCoins() {
         return objectCoins;
     }
-
     public void setObjectCoins(double objectCoins) {
         this.objectCoins = objectCoins;
     }
-
     public Stats getStats() {
         return stats;
     }
-
     public void setStats(Stats stats) {
         this.stats = stats;
     }
-
     public int getLevel() {
         return level;
     }
-
     public void setLevel(int level) {
         this.level = level;
     }
-
     public double getExperience() {
         return experience;
     }
-
     public void setExperience(double experience) {
         this.experience = experience;
     }

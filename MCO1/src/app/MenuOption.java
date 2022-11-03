@@ -36,7 +36,7 @@ public class MenuOption {
         FERTILIZE("F", "Fertilize Crop", "Fertilizes a crop. Increases its current fertilizer amount."),
         DIG("D", "Dig", "Removes a withered plant from a tile."),
         EXIT("E", "Exit", "Goes back to the previous menu."); // not really a tile action but is part of the menu
-        // MINE("M", "Mine", "Removes a rock from a tile.");
+        // TODO: MINE("M", "Mine", "Removes a rock from a tile.");
 
         private String selector;
         private String name;

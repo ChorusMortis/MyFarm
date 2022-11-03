@@ -3,6 +3,12 @@ package game.player;
 import game.farm.FarmerType;
 
 public class RankRegistrationReport {
+    public static final String REGISTER_SUCCESS = "Registration successful!";
+    public static final String REGISTER_NO_MONEY = "You have insufficient money!";
+    public static final String REGISTER_LOW_LEVEL = "You have not reached the required level for the rank!";
+    public static final String REGISTER_IS_LOWER_RANK = "You have already registered for a higher rank!";
+    public static final String REGISTER_IS_CURRENT_RANK = "You are currently registered for this rank!";
+    
     private boolean success;
     private String message;
     private FarmerType newRank;
@@ -11,12 +17,6 @@ public class RankRegistrationReport {
     private int newWaterLimitIncrease;
     private int newFertilizerLimitIncrease;
     private double cost;
-
-    public static final String REGISTER_SUCCESS = "Registration successful!";
-    public static final String REGISTER_NO_MONEY = "You have insufficient money!";
-    public static final String REGISTER_LOW_LEVEL = "You have not reached the required level for the rank!";
-    public static final String REGISTER_IS_LOWER_RANK = "You have already registered for a higher rank!";
-    public static final String REGISTER_IS_CURRENT_RANK = "You are currently registered for this rank!";
 
     public RankRegistrationReport() {
     }
@@ -31,6 +31,14 @@ public class RankRegistrationReport {
         this.newWaterLimitIncrease = newWaterLimitIncrease;
         this.newFertilizerLimitIncrease = newFertilizerLimitIncrease;
         this.cost = cost;
+    }
+
+    @Override
+    public String toString() {
+        var s = "Success: " + success + "\n"
+              + "Message: " + message + "\n";
+
+        return s;
     }
 
     public boolean isSuccess() {
@@ -80,13 +88,5 @@ public class RankRegistrationReport {
     }
     public void setCost(double cost) {
         this.cost = cost;
-    }
-
-    @Override
-    public String toString() {
-        var s = "Success: " + success + "\n"
-              + "Message: " + message + "\n";
-
-        return s;
     }
 }

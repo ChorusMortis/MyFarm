@@ -20,7 +20,6 @@ public enum TileActionData {
     public double getMoneyCost() {
         return moneyCost;
     }
-    
     public double getExpYield() {
         return expYield;
     }

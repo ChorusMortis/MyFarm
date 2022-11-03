@@ -7,7 +7,6 @@ public class HarvestCropReport {
     private double profit; // money gained from harvest
     private double expGained;
 
-
     public HarvestCropReport() {
     }
 
@@ -21,47 +20,6 @@ public class HarvestCropReport {
         this.profit = profit;
         this.expGained = expGained;
     }
-    
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getProductsProduced() {
-        return productsProduced;
-    }
-
-    public void setProductsProduced(int productsProduced) {
-        this.productsProduced = productsProduced;
-    }
-
-    public double getProfit() {
-        return profit;
-    }
-
-    public void setProfit(double profit) {
-        this.profit = profit;
-    }
-
-    public double getExpGained() {
-        return expGained;
-    }
-
-    public void setExpGained(double expGained) {
-        this.expGained = expGained;
-    }
 
     @Override
     public String toString() {
@@ -73,5 +31,36 @@ public class HarvestCropReport {
               + "Experience Gained: " + expGained + "\n";
 
         return s;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    public int getProductsProduced() {
+        return productsProduced;
+    }
+    public void setProductsProduced(int productsProduced) {
+        this.productsProduced = productsProduced;
+    }
+    public double getProfit() {
+        return profit;
+    }
+    public void setProfit(double profit) {
+        this.profit = profit;
+    }
+    public double getExpGained() {
+        return expGained;
+    }
+    public void setExpGained(double expGained) {
+        this.expGained = expGained;
     }
 }

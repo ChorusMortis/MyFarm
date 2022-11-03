@@ -14,13 +14,9 @@ public enum CropName {
     MANGO("Mango"),
     APPLE("Apple");
 
-    private String stringName;
-
     private final static Map<String, CropName> stringNameToEnum;
 
-    private CropName(String stringName) {
-        this.stringName = stringName;
-    }
+    private String stringName;
 
     static {
         Map<String, CropName> map = new HashMap<String, CropName>();
@@ -30,16 +26,20 @@ public enum CropName {
         stringNameToEnum = Collections.unmodifiableMap(map);
     }
 
+    private CropName(String stringName) {
+        this.stringName = stringName;
+    }
+
     public static CropName getFromString(String name) {
         return stringNameToEnum.get(name.toLowerCase());
+    }
+    
+    @Override
+    public String toString() {
+        return this.stringName;
     }
 
     public String getStringName() {
         return stringName;
-    }
-
-    @Override
-    public String toString() {
-        return this.stringName;
     }
 }

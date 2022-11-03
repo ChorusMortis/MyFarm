@@ -6,13 +6,12 @@ public class Tile {
     private Crop plantedCrop;
     private boolean plowed;
 
-
-    public double calculateSellPrice(int productsProduced, double bonusEarnings) {
-        double basePrice = productsProduced * (plantedCrop.getBaseSellPrice() + bonusEarnings);
-        double waterBonus = basePrice * 0.2 * (plantedCrop.getCurrentWater() - 1);
-        double fertilizerBonus = basePrice * 0.5 * plantedCrop.getCurrentFertilizer();
-        double finalPrice = (basePrice + waterBonus + fertilizerBonus) * plantedCrop.getPremiumRate();
-        return finalPrice;
+    public Tile() {
+    }
+    
+    public Tile(Crop plantedCrop, boolean plowed) {
+        this.plantedCrop = plantedCrop;
+        this.plowed = plowed;
     }
 
     public TileActionReport plow() {
@@ -118,9 +117,25 @@ public class Tile {
         return report;
     }
 
+    public double calculateSellPrice(int productsProduced, double bonusEarnings) {
+        double basePrice = productsProduced * (plantedCrop.getBaseSellPrice() + bonusEarnings);
+        double waterBonus = basePrice * 0.2 * (plantedCrop.getCurrentWater() - 1);
+        double fertilizerBonus = basePrice * 0.5 * plantedCrop.getCurrentFertilizer();
+        double finalPrice = (basePrice + waterBonus + fertilizerBonus) * plantedCrop.getPremiumRate();
+        return finalPrice;
+    }
+
     public void nextDay() {
         if (hasCrop()) {
             plantedCrop.nextDay();
+        }
+    }
+
+    // call on all tiles when player registers rank
+    public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {
+        if (hasCrop()) {
+            plantedCrop.setWaterLimit(plantedCrop.getWaterLimit() + waterLimitIncrease);
+            plantedCrop.setFertilizerLimit(plantedCrop.getFertilizerLimit() + fertilizerLimitIncrease);
         }
     }
     
@@ -136,22 +151,12 @@ public class Tile {
         }
     }
 
-    // call on all tiles when player registers rank
-    public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {
-        if (hasCrop()) {
-            plantedCrop.setWaterLimit(plantedCrop.getWaterLimit() + waterLimitIncrease);
-            plantedCrop.setFertilizerLimit(plantedCrop.getFertilizerLimit() + fertilizerLimitIncrease);
-        }
-    }
-
     public Crop getPlantedCrop() {
         return plantedCrop;
     }
-
     public boolean hasCrop() {
         return plantedCrop != null;
     }
-
     public boolean isPlowed() {
         return plowed;
     }

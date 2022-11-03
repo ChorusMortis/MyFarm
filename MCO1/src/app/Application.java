@@ -21,9 +21,9 @@ import app.MenuOption.*;
  * 8. TODO: Document code.
  */
 public final class Application {
+    private final static Scanner sc = new Scanner(System.in);
     private static Player player;
     private static boolean running = true;
-    private final static Scanner sc = new Scanner(System.in);
 
     private Application() {
     }
@@ -79,14 +79,6 @@ public final class Application {
         player = new Player(FarmerType.DEFAULT, defaultObjectCoins, defaultLevel, defaultExperience);
     }
 
-    public static void printGameState() {
-        System.out.println("Player Stats");
-        player.printState();
-        System.out.println("Tile Info");
-        getTile().printState();
-        System.out.println();
-    }
-
     public static boolean checkGameEndConditions() {
         boolean keepPlaying = true;
         String message = null;
@@ -111,9 +103,24 @@ public final class Application {
         return keepPlaying;
     }
 
+    public static void printGameState() {
+        System.out.println("Player Stats");
+        player.printState();
+        System.out.println("Tile Info");
+        getTile().printState();
+        System.out.println();
+    }
+
     public static void printMainMenu() {
         System.out.println("Main Menu\n");
         for (MainMenuOption o : MainMenuOption.values()) {
+            System.out.format("[%s] %s :: %s\n", o.getSelector(), o.getName(), o.getDescription());
+        }
+    }
+
+    public static void printTileActionsMenu() {
+        System.out.println("Tile Actions\n");
+        for (TileActionOption o : TileActionOption.values()) {
             System.out.format("[%s] %s :: %s\n", o.getSelector(), o.getName(), o.getDescription());
         }
     }
@@ -217,10 +224,24 @@ public final class Application {
         System.out.println("Exiting the Tile Actions menu.");
     }
 
-    public static void printTileActionsMenu() {
-        System.out.println("Tile Actions\n");
-        for (TileActionOption o : TileActionOption.values()) {
-            System.out.format("[%s] %s :: %s\n", o.getSelector(), o.getName(), o.getDescription());
+    public static void printBuyCropMenu() {
+        System.out.println("Buy Crop\n");
+        for (CropData c : CropData.values()) {
+            var s = "Name: " + c.getName().getStringName() + "\n"
+                  + "Type: " + c.getType().getStringName() + "\n"
+                  + "Harvest Time (in days): " + c.getHarvestAge() + "\n"
+                  + "Needed Water (Bonus Limit): " + c.getNeededWater() + "(" +
+                    (c.getWaterLimit() + getFarmer().getWaterLimitIncrease()) + ")\n"
+                  + "Needed Fertilizer (Bonus Limit): " + c.getNeededFertilizer() + "(" +
+                    (c.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease()) + ")\n"
+                  + "Yield: " + (c.getMinYield() == c.getMaxYield()
+                                ? c.getMinYield()
+                                : c.getMinYield() + "-" + c.getMaxYield()) + "\n"
+                  + "Seed Cost: " + (c.getBaseSeedCost() - getFarmer().getSeedCostReduction()) + "\n"
+                  + "Sell Price (per piece): " + (c.getBaseSellPrice() + getFarmer().getBonusEarnings()) + "\n"
+                  + "XP Yield: " + c.getExpYield() + "\n";
+
+            System.out.println(s);
         }
     }
 
@@ -253,23 +274,23 @@ public final class Application {
         return crop;
     }
 
-    public static void printBuyCropMenu() {
-        System.out.println("Buy Crop\n");
-        for (CropData c : CropData.values()) {
-            var s = "Name: " + c.getName().getStringName() + "\n"
-                  + "Type: " + c.getType().getStringName() + "\n"
-                  + "Harvest Time (in days): " + c.getHarvestAge() + "\n"
-                  + "Needed Water (Bonus Limit): " + c.getNeededWater() + "(" +
-                    (c.getWaterLimit() + getFarmer().getWaterLimitIncrease()) + ")\n"
-                  + "Needed Fertilizer (Bonus Limit): " + c.getNeededFertilizer() + "(" +
-                    (c.getFertilizerLimit() + getFarmer().getFertilizerLimitIncrease()) + ")\n"
-                  + "Yield: " + (c.getMinYield() == c.getMaxYield()
-                                ? c.getMinYield()
-                                : c.getMinYield() + "-" + c.getMaxYield()) + "\n"
-                  + "Seed Cost: " + (c.getBaseSeedCost() - getFarmer().getSeedCostReduction()) + "\n"
-                  + "Sell Price (per piece): " + (c.getBaseSellPrice() + getFarmer().getBonusEarnings()) + "\n"
-                  + "XP Yield: " + c.getExpYield() + "\n";
+    public static void nextDay() {
+        // TODO: in MCO2, replace with for each loop, calling each tile in farm lot's nextDay() method
+        System.out.println("Moving on to the next day!\n");
+        getTile().nextDay();
+    }
 
+    public static void printRegistrationMenu() {
+        System.out.println("Register\n");
+        for (FarmerType f : FarmerType.values()) {
+            var s = "Name: " + f.getStringName() + "\n"
+                  + "Fee: " + f.getRegFee() + "\n"
+                  + "Level Requirement: " + f.getLevelReq() + "\n"
+                  + "Bonus Earnings: " + f.getBonusEarnings() + "\n"
+                  + "Seed Cost Reduction: " + f.getSeedCostReduction() + "\n"
+                  + "Water Limit Increase: " + f.getWaterLimitIncrease() + "\n"
+                  + "Fertilizer Limit Increase: " + f.getFertilizerLimitIncrease() + "\n";
+            
             System.out.println(s);
         }
     }
@@ -304,27 +325,6 @@ public final class Application {
         }
     }
 
-    public static void printRegistrationMenu() {
-        System.out.println("Register\n");
-        for (FarmerType f : FarmerType.values()) {
-            var s = "Name: " + f.getStringName() + "\n"
-                  + "Fee: " + f.getRegFee() + "\n"
-                  + "Level Requirement: " + f.getLevelReq() + "\n"
-                  + "Bonus Earnings: " + f.getBonusEarnings() + "\n"
-                  + "Seed Cost Reduction: " + f.getSeedCostReduction() + "\n"
-                  + "Water Limit Increase: " + f.getWaterLimitIncrease() + "\n"
-                  + "Fertilizer Limit Increase: " + f.getFertilizerLimitIncrease() + "\n";
-            
-            System.out.println(s);
-        }
-    }
-
-    public static void nextDay() {
-        // TODO: in MCO2, replace with for each loop, calling each tile in farm lot's nextDay() method
-        System.out.println("Moving on to the next day!\n");
-        getTile().nextDay();
-    }
-
     public static String getStringInput(String prompt) {
         System.out.print(prompt);
         return sc.nextLine();
@@ -351,15 +351,13 @@ public final class Application {
 
         return retval;
     }
-
+    
     public static Tile getTile() {
         return player.getFarmLot().getTiles();
     }
-
     public static Crop getCrop() {
         return player.getFarmLot().getTiles().getPlantedCrop();
     }
-
     public static Farmer getFarmer() {
         return player.getFarmer();
     }
