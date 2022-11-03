@@ -7,6 +7,9 @@ public class Farmer {
     private int waterLimitIncrease;
     private int fertilizerLimitIncrease;
 
+    public Farmer() {
+    }
+    
     public Farmer(FarmerType farmerType) {
         this.farmerType = farmerType;
         this.bonusEarnings = farmerType.getBonusEarnings();

@@ -10,6 +10,9 @@ public class Player {
     private int level;
     private double experience;
 
+    public Player() {
+    }
+    
     public Player(FarmerType farmer, double objectCoins, int level, double experience) {
         this.farmer = new Farmer(farmer);
         this.farmLot = new FarmLot();

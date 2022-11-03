@@ -16,7 +16,7 @@ import app.MenuOption.*;
  * 3. Apply stat changes after registration to calculations and newly created Crops.
  * 4. Implement game-ending conditions.
  * 5. Improve prompts on menus and spacing in design.
- * 6. TODO: Fix getter and setter logic. Remove any unnecessary methods.
+ * 6. Fix getter and setter logic. Remove any unnecessary methods.
  * 7. TODO: Optimize and clean up code.
  * 8. TODO: Document code.
  */

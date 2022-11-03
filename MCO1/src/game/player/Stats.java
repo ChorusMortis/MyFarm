@@ -9,6 +9,19 @@ public class Stats {
     private int timesDug;
     // TODO: private int timesMined;
 
+    public Stats() {
+    }
+
+    public Stats(int timesPlanted, int timesPlowed, int timesWatered, int timesFertilized, int timesHarvested,
+            int timesDug) {
+        this.timesPlanted = timesPlanted;
+        this.timesPlowed = timesPlowed;
+        this.timesWatered = timesWatered;
+        this.timesFertilized = timesFertilized;
+        this.timesHarvested = timesHarvested;
+        this.timesDug = timesDug;
+    }
+
     public int addTimesPlanted() {
         return ++timesPlanted;
     }

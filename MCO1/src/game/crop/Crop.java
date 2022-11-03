@@ -34,6 +34,9 @@ public class Crop {
     // Special mechanics
     private double premiumRate = 1.0;
 
+    public Crop() {
+    }
+    
     public Crop(CropData cropData) {
         this.name = cropData.getName();
         this.type = cropData.getType();
