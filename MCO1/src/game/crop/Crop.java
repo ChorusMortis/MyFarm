@@ -1,5 +1,8 @@
 package game.crop;
 
+/**
+ * A crop that can be planted and sold for profit.
+ */
 public class Crop {
     // Crop description
     private CropName name;
@@ -34,9 +37,16 @@ public class Crop {
     // Special mechanics
     private double premiumRate = 1.0;
 
+    /**
+     * Creates a new crop.
+     */
     public Crop() {
     }
-    
+
+    /**
+     * Creates a new crop and initializes its data using set crop data.
+     * @param cropData
+     */
     public Crop(CropData cropData) {
         this.name = cropData.getName();
         this.type = cropData.getType();
@@ -52,7 +62,23 @@ public class Crop {
         this.fertilizerLimit = cropData.getFertilizerLimit();
         this.premiumRate = cropData.getPremiumRate();
     }
-    
+
+    /**
+     * Creates a new crop and initializes its data.
+     * @param name               Name of the crop.
+     * @param type               Type of the crop.
+     * @param baseSeedCost       Base buy cost when purchasing.
+     * @param baseSellPrice      Base sell price for each product sold.
+     * @param expYield           Experience given when harvested.
+     * @param harvestAge         Days before a crop can become harvestable.
+     * @param minYield           Lower bound for products produced.
+     * @param maxYield           Upper bound for products produced.
+     * @param waterNeeded        Required water to become harvestable.
+     * @param waterLimit         Upper bound for the water count.
+     * @param fertilizerNeeded   Required fertilizer to become harvestable.
+     * @param fertilizerLimit    Upper bound for the fertilizer count.
+     * @param premiumRate        Premium for each piece sold.
+     */
     public Crop(CropName name, CropType type, double baseSeedCost, double baseSellPrice, double expYield,
             int harvestAge, int minYield, int maxYield, int waterNeeded, int waterLimit, int fertilizerNeeded,
             int fertilizerLimit, double premiumRate) {
@@ -71,6 +97,10 @@ public class Crop {
         this.premiumRate = premiumRate;
     }
 
+    /**
+     * Increases the crop's age and updates its state, depending on its
+     * current water and fertilizer count.
+     */
     public void nextDay() {
         grow(); // crop ages regardless of state
 
@@ -89,24 +119,46 @@ public class Crop {
         }
     }
     
+    /**
+     * Returns a harvest report containing the products produced and the
+     * crop's experience yield. Does not calculate the profit when sold.
+     * @return   A report containing the products produced and the crop's
+     *           experience yield.
+     */
     public HarvestCropReport harvest() {
-        // profit is calculated externally
         int productsProduced = getRandomYield();
         return new HarvestCropReport(productsProduced, 0, expYield);
     }
     
+    /**
+     * Randomly generates a number between the crop's minimum and maximum
+     * product yield, both inclusive.
+     * @return   The randomly generated yield.
+     */
     public int getRandomYield() {
         return (int)((Math.random() * (maxYield - minYield)) + minYield);
     }
 
+    /**
+     * Increases the crop's age in days.
+     * @param amount   The amount of days to add to the crop's age.
+     */
     public void addAge(int amount) {
         age += amount;
     }
 
+    /**
+     * Increases the crop's age by one day.
+     * @see #addAge(int)
+     */
     public void grow() {
         addAge(1);
     }
 
+    /**
+     * Increases the crop's water count until it reaches its water limit.
+     * @param amount   The amount of water to add to the crop.
+     */
     public void addWater(int amount) {
         currentWater += amount;
         if (currentWater > waterLimit) {
@@ -114,10 +166,19 @@ public class Crop {
         }
     }
 
+    /**
+     * Increases the crop's water count by one.
+     * @see #addWater(int)
+     */
     public void water() {
         addWater(1);
     }
-    
+
+    /**
+     * Increases the crop's fertilizer count until it reaches its fertilizer
+     * limit.
+     * @param amount   The amount of fertilizer to add to the crop.
+     */
     public void addFertilizer(int amount) {
         currentFertilizer += amount;
         if (currentFertilizer > fertilizerLimit) {
@@ -125,10 +186,19 @@ public class Crop {
         }
     }
 
+    /**
+     * Increases the crop's fertilizer count by one.
+     * @see #addFertilizer(int)
+     */
     public void fertilize() {
         addFertilizer(1);
     }
 
+    /**
+     * Displays the crop's attributes: name, type, age, current water count,
+     * current fertilizer count, if it's harvestable or withered, and reason
+     * for withering, if it is the latter.
+     */
     public void printState() {
         var s = "Crop Name: " + name.getStringName() + "\n"
               + "Crop Type: " + type.getStringName() + "\n"
