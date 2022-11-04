@@ -2,18 +2,38 @@ package game.tile;
 
 import game.crop.*;
 
+/**
+ * Represents each tile in the farmer's farm lot that can grow a crop on.
+ */
 public class Tile {
     private Crop plantedCrop;
     private boolean plowed;
-
+    
+    /**
+     * Creates a tile.
+     */
     public Tile() {
     }
     
+    /**
+     * Creates a tile, initializes it with a crop, and sets its plowed state.
+     * @param plantedCrop   The crop planted on the tile.
+     * @param plowed        Whether the crop is plowed or not.
+     */
     public Tile(Crop plantedCrop, boolean plowed) {
         this.plantedCrop = plantedCrop;
         this.plowed = plowed;
     }
 
+    /**
+     * Plows the tile and returns a report detailing if it was successful and
+     * feedback about the action. Plowing fails if one of the following
+     * conditions is met:
+     *    1. The tile is already plowed.
+     *    2. The tile already has a crop.
+     * @return   Report about the action.
+     * @see TileActionReportMessages
+     */
     public TileActionReport plow() {
         TileActionReport report = new TileActionReport(false, null, 0);
 
@@ -30,8 +50,20 @@ public class Tile {
 
         return report;
     }
-
-    // assumes that tile is plowed
+    
+    /**
+     * Plants the given crop and returns a report detailing if it was
+     * successful and feedback about the action. Planting fails if one of the
+     * following conditions is met:
+     *    1. The player has insufficient money.
+     *    2. The tile already has a planted crop.
+     * @pre The tile is plowed.
+     * @param crop                The crop to be planted.
+     * @param playerMoney         Player's current amount of money.
+     * @param seedCostReduction   Discount for the purchase.
+     * @return   Report about the action.
+     * @see TileActionReportMessages
+     */
     public TileActionReport plant(Crop crop, double playerMoney, double seedCostReduction) {
         TileActionReport report = new TileActionReport(false, null, 0);
 
@@ -49,7 +81,17 @@ public class Tile {
         return report;
     }
 
-    // assumes that plantedCrop != null and isHarvestable()
+    /**
+     * Harvests the crop, removes it from the tile, and returns a report
+     * detailing if it was successful and feedback about the action.
+     * Harvesting is always successful.
+     * @pre plantedCrop != null and isHarvestable()
+     * @param bonusEarnings   Added money per product sold.
+     * @return   Report about the action.
+     * @see Crop#harvest()
+     * @see #calculateSellPrice(int, double)
+     * @see TileActionReportMessages
+     */
     public HarvestCropReport harvest(double bonusEarnings) {
         // products produced and exp yield are calculated in plantedCrop's harvest() method
         HarvestCropReport report = plantedCrop.harvest();
@@ -62,7 +104,13 @@ public class Tile {
         return report;
     }
 
-    // assumes that plantedCrop != null and is !withered
+    /**
+     * Waters the crop and returns a report detailing if it was successful and
+     * feedback about the action. Watering is always successful.
+     * @pre plantedCrop != null and is !withered
+     * @return   Report about the action.
+     * @see TileActionReportMessages
+     */
     public TileActionReport water() {
         plantedCrop.water();
         TileActionReport report = new TileActionReport(true, null, 0);
@@ -71,8 +119,17 @@ public class Tile {
 
         return report;
     }
-
-    // assumes that plantedCrop != null and is !withered
+    
+    /**
+     * Fertilizes the crop and returns a report detailing if it was successful
+     * and feedback about the action. Fertilization fails if one of the
+     * following conditions is met:
+     *    1. The player has insufficient money.
+     * @pre plantedCrop != null and is !withered
+     * @param playerMoney   Player's current amount of money.
+     * @return   Report about the action.
+     * @see TileActionReportMessages
+     */
     public TileActionReport fertilize(double playerMoney) {
         TileActionReport report = new TileActionReport(false, null, 0);
 
@@ -88,12 +145,17 @@ public class Tile {
         return report;
     }
 
-    // assumes that tile has a rock; unused so don't call for now
-    public TileActionReport mine() {
-        TileActionReport report = new TileActionReport(false, null, 0);
-        return report;
-    }
-
+    /**
+     * Uses the shovel on the tile, which can have varying effects:
+     *    1. It removes a crop if the tile has one.
+     *    2. It unplows the tile if it is plowed and has no crop.
+     *    3. It does nothing to an unplowed tile.
+     * It only effectively fails if the player has insufficient money.
+     * Otherwise, the player is still charged for using the shovel.
+     * @param playerMoney   Player's current amount of money.
+     * @return   Report about the action.
+     * @see TileActionReportMessages
+     */
     public TileActionReport dig(double playerMoney) {
         TileActionReport report = new TileActionReport(false, null, 0);
 
@@ -117,6 +179,13 @@ public class Tile {
         return report;
     }
 
+    /**
+     * Calculates the total sell price for the harvested crop given the amount
+     * of products produced and how much money is added per product sold.
+     * @param productsProduced   The amount of products harvested.
+     * @param bonusEarnings      Money added per product sold.
+     * @return   Total selling price for the harvested crop.
+     */
     public double calculateSellPrice(int productsProduced, double bonusEarnings) {
         double basePrice = productsProduced * (plantedCrop.getBaseSellPrice() + bonusEarnings);
         double waterBonus = basePrice * 0.2 * (plantedCrop.getCurrentWater() - 1);
@@ -125,20 +194,35 @@ public class Tile {
         return finalPrice;
     }
 
+    /**
+     * If the tile has a planted crop, it calls the crop's method for moving
+     * on to the next day.
+     * @see Crop#nextDay()
+     */
     public void nextDay() {
         if (hasCrop()) {
             plantedCrop.nextDay();
         }
     }
 
-    // call on all tiles when player registers rank
+    /**
+     * Updates a crop's bonus water and fertilizer limits. Called when the
+     * player successfully registers for a new farmer type/rank.
+     * @param waterLimitIncrease
+     * @param fertilizerLimitIncrease
+     */
     public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {
         if (hasCrop()) {
             plantedCrop.setWaterLimit(plantedCrop.getWaterLimit() + waterLimitIncrease);
             plantedCrop.setFertilizerLimit(plantedCrop.getFertilizerLimit() + fertilizerLimitIncrease);
         }
     }
-    
+
+    /**
+     * Prints the state of the crop, detailing if it has one and if it is
+     * plowed. If it has a crop, it also prints the crop's state.
+     * @see Crop#printState()
+     */
     public void printState() {
         var s = "Has crop: " + hasCrop() + "\n"
               + "Is plowed: " + isPlowed() + "\n";
@@ -160,4 +244,10 @@ public class Tile {
     public boolean isPlowed() {
         return plowed;
     }
+
+    // assumes that tile has a rock; unused so don't call for now
+    // public TileActionReport mine() {
+    //     TileActionReport report = new TileActionReport(false, null, 0);
+    //     return report;
+    // }
 }

@@ -124,6 +124,8 @@ public class Crop {
      * crop's experience yield. Does not calculate the profit when sold.
      * @return   A report containing the products produced and the crop's
      *           experience yield.
+     * @see game.tile.Tile#harvest(double) Tile.harvest(double)
+     * @see HarvestCropReport
      */
     public HarvestCropReport harvest() {
         int productsProduced = getRandomYield();
