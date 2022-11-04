@@ -1,5 +1,8 @@
 package game.crop;
 
+/**
+ * Contains feedback info for a harvest.
+ */
 public class HarvestCropReport {
     private boolean success = true;
     private String message = "Harvest successful!";
@@ -7,20 +10,41 @@ public class HarvestCropReport {
     private double profit; // money gained from harvest
     private double expGained;
 
+    /**
+     * Creates a harvest report.
+     */
     public HarvestCropReport() {
     }
 
+    /**
+     * Creates a harvest report with a set amount of products produced and
+     * experience gained.
+     * @param productsProduced   The products produced upon harvest.
+     * @param expGained          The experience gained upon harvest.
+     */
     public HarvestCropReport(int productsProduced, double expGained) {
         this.productsProduced = productsProduced;
         this.expGained = expGained;
     }
 
+    /**
+     * Creates a harvest report with a set amount of products produced,
+     * profit, and experience gained.
+     * @param productsProduced   The products produced upon harvest.
+     * @param profit             The profit when the crop(s) is sold.
+     * @param expGained          The experience gained upon harvest.
+     */
     public HarvestCropReport(int productsProduced, double profit, double expGained) {
         this.productsProduced = productsProduced;
         this.profit = profit;
         this.expGained = expGained;
     }
 
+    /**
+     * Returns the details of the report, including if it was a success,
+     * feedback, the amount of products produced, profit, and experience
+     * gained.
+     */
     @Override
     public String toString() {
         var s = "Harvest Report:\n"
