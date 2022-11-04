@@ -1,5 +1,9 @@
 package game.farm;
 
+/**
+ * Represents the type/rank of farmer the player is and their
+ * statistics and bonuses.
+ */
 public class Farmer {
     private FarmerType farmerType;
     private double bonusEarnings;
@@ -7,9 +11,17 @@ public class Farmer {
     private int waterLimitIncrease;
     private int fertilizerLimitIncrease;
 
+    /**
+     * Creates a farmer.
+     */
     public Farmer() {
     }
-    
+
+    /**
+     * Creates a farmer using set data/statistics.
+     * @param farmerType   Contains the data/statistics of the farmer.
+     * @see FarmerType
+     */
     public Farmer(FarmerType farmerType) {
         this.farmerType = farmerType;
         this.bonusEarnings = farmerType.getBonusEarnings();
