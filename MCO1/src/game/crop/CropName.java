@@ -64,7 +64,7 @@ public enum CropName {
 
     /**
      * Creates a set string name for a crop.
-     * @param stringName
+     * @param stringName   The string name of the crop.
      */
     private CropName(String stringName) {
         this.stringName = stringName;
