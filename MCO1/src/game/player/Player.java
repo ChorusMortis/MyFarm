@@ -141,11 +141,12 @@ public class Player {
     }
     
     /**
-     * Prints the state of the player, including their current money count,
-     * level, and experience.
+     * Prints the state of the player, including their current farmer
+     * rank/type, money count, level, and experience.
      */
     public void printState() {
-        var s = "Objectcoins: " + objectCoins + "\n"
+        var s = "Farmer Rank: " + farmer.getFarmerType() + "\n"
+              + "Objectcoins: " + objectCoins + "\n"
               + "Level: " + level + "\n"
               + "Experience: " + experience + "\n"
               + stats + "\n";
