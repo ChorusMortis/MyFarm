@@ -56,8 +56,8 @@ public class RankRegistrationReport {
     }
 
     /**
-     * Prints if the registration was a success and the corresponding
-     * feedback.
+     * Returns the state of the report, including if the registration was a
+     * success and the corresponding feedback.
      */
     @Override
     public String toString() {
