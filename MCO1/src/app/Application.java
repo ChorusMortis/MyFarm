@@ -30,6 +30,7 @@ public final class Application {
             running = playGame();
             System.out.println();
         }
+        sc.close();
     }
 
     /**
