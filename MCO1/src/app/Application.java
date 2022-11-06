@@ -77,9 +77,9 @@ public final class Application {
      * Initializes the game's (specifically the player's) initial data.
      */
     public static void initializeGame() {
-        double defaultObjectCoins = 9999.0;
-        int defaultLevel = 25;
-        double defaultExperience = 2500.0;
+        double defaultObjectCoins = 100.0;
+        int defaultLevel = 0;
+        double defaultExperience = 0.0;
         player = new Player(FarmerType.DEFAULT, defaultObjectCoins, defaultLevel, defaultExperience);
     }
 
@@ -411,9 +411,9 @@ public final class Application {
                         int waterLimitIncrease = r.getNewWaterLimitIncrease() - getFarmer().getWaterLimitIncrease();
                         int fertilizerLimitIncrease = r.getNewFertilizerLimitIncrease()
                                                       - getFarmer().getFertilizerLimitIncrease();
-                        player.setFarmer(new Farmer(r.getNewRank()));
                         // TODO: for MCO2, call this for every tile in the farm lot
                         getTile().updateCropStats(waterLimitIncrease, fertilizerLimitIncrease);
+                        player.setFarmer(new Farmer(r.getNewRank()));
                     }
                     System.out.println(r);
                 } else {
