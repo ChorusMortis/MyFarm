@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 
+import game.tile.TileActionData;
+
 /**
  * Stores data for the application's main menus.
  */
@@ -107,13 +109,16 @@ public class MenuOption {
         /**
          * Option for fertilizing a planted crop.
          */
-        FERTILIZE("F", "Fertilize Crop", "Fertilizes a crop. Increases its current fertilizer amount."),
+        FERTILIZE("F", "Fertilize Crop",
+                "Fertilizes a crop. Increases its current fertilizer amount. Costs "
+                        + TileActionData.FERTILIZE.getMoneyCost() + " Objectcoins."),
 
         /**
          * Option for digging a planted crop. Has other effects, depending on
          * the tile's state.
          */
-        DIG("D", "Dig", "Removes a withered plant from a tile."),
+        DIG("D", "Dig",
+                "Removes a withered plant from a tile. Costs " + TileActionData.DIG.getMoneyCost() + " Objectcoins."),
 
         /**
          * Option for exiting the menu.
