@@ -9,7 +9,7 @@ import java.util.Collections;
  */
 public enum CropData {
     /**
-     * Data for the turnip root crop. Not to be confused with the flower.
+     * Data for the turnip root crop.
      */
     TURNIP(CropName.TURNIP, CropType.ROOT_CROP, 2, 1, 2, 0, 1, 1, 2, 5, 6, 5),
 
@@ -29,9 +29,9 @@ public enum CropData {
     ROSE(CropName.ROSE, CropType.FLOWER, 1, 1, 2, 0, 1, 1, 1, 5, 5, 2.5),
 
     /**
-     * Data for the turnips flower. Not to be confused with the root crop.
+     * Data for the tulips flower.
      */
-    TURNIPS(CropName.TURNIPS, CropType.FLOWER, 2, 2, 3, 0, 1, 1, 1, 10, 9, 5),
+    TULIPS(CropName.TULIPS, CropType.FLOWER, 2, 2, 3, 0, 1, 1, 1, 10, 9, 5),
 
     /**
      * Data for the sunflower flower.

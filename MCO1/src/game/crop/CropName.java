@@ -9,8 +9,7 @@ import java.util.Collections;
  */
 public enum CropName {
     /**
-     * String name of the turnip root crop. Not to be confused with the
-     * turnips flower crop.
+     * String name of the turnip root crop.
      */
     TURNIP("Turnip"),
 
@@ -30,10 +29,9 @@ public enum CropName {
     ROSE("Rose"),
 
     /**
-     * String name for the turnips flower crop. Not to be confused with the
-     * turnip root crop.
+     * String name for the tulips flower crop.
      */
-    TURNIPS("Turnips"),
+    TULIPS("Tulips"),
 
     /**
      * String name for the sunflower flower crop.
