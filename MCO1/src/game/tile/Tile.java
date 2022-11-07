@@ -208,8 +208,9 @@ public class Tile {
     /**
      * Updates a crop's bonus water and fertilizer limits. Called when the
      * player successfully registers for a new farmer type/rank.
-     * @param waterLimitIncrease
-     * @param fertilizerLimitIncrease
+     * @param waterLimitIncrease        Amount to increase the water limit by.
+     * @param fertilizerLimitIncrease   Amount to increase the fertilizer
+     *                                  limit by.
      */
     public void updateCropStats(int waterLimitIncrease, int fertilizerLimitIncrease) {
         if (hasCrop()) {
