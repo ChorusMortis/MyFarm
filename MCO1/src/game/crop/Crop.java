@@ -45,7 +45,7 @@ public class Crop {
 
     /**
      * Creates a new crop and initializes its data using set crop data.
-     * @param cropData
+     * @param cropData   Contains the set data of the crop.
      */
     public Crop(CropData cropData) {
         this.name = cropData.getName();

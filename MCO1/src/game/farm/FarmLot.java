@@ -19,7 +19,7 @@ public class FarmLot {
     /**
      * Creates a farm lot and initializes it with the given Tile.
      * @see Tile
-     * @param tiles
+     * @param tiles   The tiles the farm lot will have.
      */
     public FarmLot(Tile tiles) {
         this.tiles = tiles;

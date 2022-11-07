@@ -23,10 +23,10 @@ public class Player {
     /**
      * Creates a player and initializes it using the given farmer type, money
      * count, level, and experience. The rest are initialized automatically.
-     * @param farmer
-     * @param objectCoins
-     * @param level
-     * @param experience
+     * @param farmer        The type/rank of farmer the player has.
+     * @param objectCoins   Initial money count.
+     * @param level         Initial level.
+     * @param experience    Initial experience.
      * @see FarmerType
      */
     public Player(FarmerType farmer, double objectCoins, int level, double experience) {
@@ -45,7 +45,7 @@ public class Player {
      * @param farmLot       The farm lot (collection of tles) the player has.
      * @param objectCoins   Initial money count.
      * @param stats         A collection of tracked statistics.
-     * @param level         Initial starting level.
+     * @param level         Initial level.
      * @param experience    Initial experience.
      * @see FarmerType
      * @see FarmLot
