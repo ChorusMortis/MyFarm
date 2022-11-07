@@ -98,8 +98,9 @@ public class Crop {
     }
 
     /**
-     * Increases the crop's age and updates its state, depending on its
-     * current water and fertilizer count.
+     * Increases the crop's age and updates its state, depending on its age,
+     * current water and fertilizer count. If multiple withering conditions
+     * are satisfied, only the first one checked reflects.
      */
     public void nextDay() {
         grow(); // crop ages regardless of state
@@ -113,7 +114,11 @@ public class Crop {
                 harvestable = false;
                 withered = true;
                 lacksFertilizer = true;
-            } else { // currentWater >= waterNeeded && currentFertilizer >= fertilizerNeeded
+            } else if (age > harvestAge) {
+                harvestable = false;
+                withered = true;
+                overripe = true;
+            } else { // currentWater >= waterNeeded && currentFertilizer >= fertilizerNeeded && age == harvestAge
                 harvestable = true;
             }
         }
